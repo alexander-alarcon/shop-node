@@ -1,0 +1,25 @@
+extends ../layouts/main-layout.pug
+
+block content
+  p List of products
+  if products.length > 0
+    .p-5.grid
+      each product in products
+        article.shadow-md.Product__Item
+          header.p-4
+            h3.m-0.Product__Title #{ product.title }
+          .w-full
+            img.w-full(src=`${ product.imageUrl }`, alt=`${ product.title }`)
+          .m-0.p-4
+            p.m-0.Product__Price $#{ product.price }
+            p.m-0.Product__Description #{ product.description }
+          .p-4.text-center
+            button.mx-2.px-4.py-2.border.border-teal-800.bg-white.text-teal-800.cursor-pointer.rounded(
+              type='button'
+              class='hover:bg-teal-800 hover:text-white active:bg-teal-800 active:text-white'
+              onclick=`getDetails('${ product.id }')`
+            )
+              | Details
+            +formButton('/shop/cart', 'Add to Cart', product)
+  else
+    h3 No Products!

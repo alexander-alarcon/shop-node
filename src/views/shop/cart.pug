@@ -1,0 +1,24 @@
+extends ../layouts/main-layout.pug
+
+block content
+  .flex.justify-center
+    if products.length > 0
+      table.table-fixed
+        thead
+        tr
+          th.px-4.py-2.border.border-teal-800 Product
+          th.px-4.py-2.border.border-teal-800 Quantity
+          th.px-4.py-2.border.border-teal-800 Actions
+        tbody
+          each product in products
+            tr 
+              td.px-4.py-2.border.border-teal-800 #{ product.title}
+              td.px-4.py-2.border.border-teal-800.text-center #{ product.CartItem.quantity }
+              td.px-4.py-2.border.border-teal-800
+                +formButton('/shop/cart-delete-item', 'Remove', product, 'danger')
+        tfoot
+          tr
+            td.px-4.py-2.border.border-teal-800.text-center(colspan=3)
+              +formButton('/shop/create-order', 'Order Now!', {})
+    else
+      p No products in cart

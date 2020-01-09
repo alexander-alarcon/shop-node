@@ -1,0 +1,58 @@
+doctype html
+head
+  meta(charset='UTF-8')
+  meta(name='viewport' content='width=device-width, initial-scale=1.0')
+  meta(http-equiv='X-UA-Compatible' content='ie=edge')
+  link(href='https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css' rel='stylesheet')
+  link(href='https://fonts.googleapis.com/css?family=Montserrat&display=swap' rel='stylesheet')
+  link(rel="stylesheet", href="/stylesheets/style.css")
+  title #{ docTitle }
+  block styles
+  
+body(style='font-family: "Montserrat", sans-serif;')  
+  include ../mixins/form-button
+
+  header.w-full.px-4.bg-teal-800(class='')
+
+    nav.flex.items-center.justify-end.flex-wrap.py-6
+      .block(class='md:hidden')
+        button#toggler.flex.items-center.text-white(class='hover:text-white hover:border-white')
+          svg.fill-current.h-4.w-4(viewbox='0 0 20 20' xmlns='http://www.w3.org/2000/svg')
+            title Menu
+            path(d='M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z')
+      #nav-items.w-full.hidden.flex-grow(class='md:flex md:items-center md:w-auto')
+        .flex.flex-col(class='md:flex-grow md:flex-row')
+          a.block.mt-4.text-white.text-center.mr-4(
+            href='/'
+            class=(path==='/' ? 'text-yellow-500' : '')
+            class=('md:mt-0 hover:text-yellow-500 active:text-yellow-500')
+          ) Shop
+          a.block.mt-4.text-white.text-center.mr-4(
+            href='/shop/cart'
+            class=(path==='/cart' ? 'text-yellow-500' : '')
+            class=('md:mt-0 hover:text-yellow-500 active:text-yellow-500')
+          ) Cart
+          a.block.mt-4.text-white.text-center.mr-4(
+            href='/shop/orders'
+            class=(path==='/shop/orders' ? 'text-yellow-500' : '')
+            class=('md:mt-0 hover:text-yellow-500 active:text-yellow-500')
+          ) Orders
+          a.block.mt-4.text-white.text-center.mr-4(
+            href='/admin/add-product'
+            class=(path==='/admin/add-product' ? 'text-yellow-500' : '')
+            class=('md:mt-0 hover:text-yellow-500 active:text-yellow-500')
+          ) Add Product
+          a.block.mt-4.text-white.text-center.mr-4(
+            href='/admin/products'
+            class=(path==='/admin/products' ? 'text-yellow-500' : '')
+            class=('md:mt-0 hover:text-yellow-500 active:text-yellow-500')
+          ) Admin Products
+
+  main.p-4    
+    block content
+
+  script(
+    src='https://kit.fontawesome.com/a870ea828a.js'
+    crossorigin='anonymous'
+  )
+  script(src='/javascripts/main.js')

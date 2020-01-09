@@ -1,0 +1,51 @@
+extends ../layouts/main-layout.pug
+
+block content
+  form.max-w-full.m-auto(
+    action=`/admin/${editing ? 'edit' : 'add'}-product`
+    method='POST'
+    class='w-11/12'
+  )
+    if editing
+      input(type='hidden', name='productId', value=`${ product.id }`)
+    
+    .my-4
+      label.block.w-full(for='title')
+        | Title
+        input#title.w-full.block.px-4.py-2.border.border-solid.border-teal-800.rounded.outline-none(
+          type='text'
+          name='title'
+          value=`${editing ? product.title : ''}`
+        )
+
+    .my-4
+      label.block.w-full(for='imageUrl')
+        | Image URL
+        input#imageUrl.w-full.block.px-4.py-2.border.border-solid.border-teal-800.rounded.outline-none(
+          type='text'
+          name='imageUrl'
+          value=`${editing ? product.imageUrl : ''}`
+        )
+
+    .my-4
+      label.block.w-full(for='price')
+        | Price
+        input#price.w-full.block.px-4.py-2.border.border-solid.border-teal-800.rounded.outline-none(
+          type='number'
+          name='price'
+          step='0.01'
+          value=`${editing ? product.price : ''}`
+        )
+    
+    .my-4
+      label.block.w-full(for='description')
+        | Description
+        textarea#description.w-full.block.px-4.py-2.border.border-solid.border-teal-800.rounded.outline-none(
+          rows='5'
+          name='description'
+        )
+          | #{editing ? product.description : ''}
+
+    .my-4
+      button.px-4.py-2.border.border-teal-800.bg-white.text-teal-800.cursor-pointer.rounded(type='submit' class='hover:bg-teal-800 hover:text-white active:bg-teal-800 active:text-white')
+        | Submit

@@ -1,0 +1,28 @@
+version: '3'
+services:
+  mongo:
+    container_name: shop-mongoose
+    image: mongo
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_DATABASE=test
+      - MONGO_INITDB_ROOT_PASSWORD=myPass
+      - MONGO_NON_ROOT_USERNAME=nonRoot
+      - MONGO_NON_ROOT_PASSWORD=nonRoot
+    ports:
+      - '27017-27019:27017-27019'
+    volumes:
+      - data-db:/data/db
+      - data-db_config:/data/configdb
+
+volumes:
+  data-db:
+    driver_opts:
+      type: none
+      device: /home/william/dbs/mongo/db
+      o: bind
+  data-db_config:
+    driver_opts:
+      type: none
+      device: /home/william/dbs/mongo/configdb
+      o: bind
