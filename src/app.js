@@ -3,10 +3,43 @@ const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
+const mongoose = require('mongoose');
+const debug = require('debug')('shop-sequelize:DB');
+
+const errorLogger = debug.extend('error');
 
 const indexRouter = require('./routes/index');
 const adminRouter = require('./routes/admin');
 const shopRouter = require('./routes/shop');
+
+const url = `mongodb://${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}`;
+debug(url);
+mongoose
+  .connect(url, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .catch((err) => {
+    return errorLogger(err);
+  });
+
+mongoose.connection.on('error', (err) => {
+  errorLogger(err);
+});
+
+mongoose.connection.once('open', () => {
+  debug('Connection Openned');
+});
+
+mongoose.connection.on('connected', (err, res) => {
+  if (err) {
+    errorLogger(err);
+  }
+  if (res) {
+    debug(res);
+  }
+  debug('The DB was connected successfully');
+});
 
 const app = express();
 
@@ -19,19 +52,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-
-app.use(async (req, res, next) => {
-  /* try {
-    const user = await User.findByPk('1');
-    req.user = user;
-    next();
-  } catch (error) {
-    console.log(error);
-    next(error);
-  } */
-  next();
-});
-
 app.use('/', indexRouter);
 app.use('/shop', shopRouter);
 app.use('/admin', adminRouter);
