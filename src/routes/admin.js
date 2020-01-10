@@ -29,9 +29,9 @@ router
   .get(getAddProduct)
   .post(postAddProduct);
 
-// /*
-//   POST /admin/delete-product
-// */
-// router.post('/delete-product', deleteProduct);
+/*
+  POST /admin/delete-product
+*/
+router.post('/delete-product', deleteProduct);
 
 module.exports = router;

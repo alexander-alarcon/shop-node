@@ -43,7 +43,7 @@ exports.getProduct = async (req, res, next) => {
 };
 
 exports.getAddProduct = async (req, res, next) => {
-  res.render('admin/edit-product', {
+  return res.render('admin/edit-product', {
     docTitle: 'Add Product',
     path: '/admin/add-product',
   });
@@ -66,18 +66,19 @@ exports.postAddProduct = async (req, res, next) => {
   }
 };
 
-/* exports.deleteProduct = async (req, res, next) => {
+exports.deleteProduct = async (req, res, next) => {
   const { productId } = req.body;
-  const transaction = await sequelize.transaction();
 
   try {
-    await Product.update({ isArchived: 1 }, { where: { id: +productId } });
-    await transaction.commit();
+    await Product.findByIdAndUpdate(
+      { _id: productId },
+      {
+        isArchived: true,
+      },
+    );
     return res.redirect('/admin/products');
   } catch (error) {
     debug(error);
-    await transaction.rollback();
     return next(error);
   }
 };
- */

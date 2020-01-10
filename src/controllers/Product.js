@@ -23,7 +23,7 @@ exports.getProduct = async (req, res, next) => {
       _id: productId,
       isArchived: false,
     });
-    console.log({ product, yolo: 'yolo' });
+
     if (product) {
       return res.render('shop/product-detail', {
         docTitle: 'Shop',
