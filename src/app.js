@@ -8,6 +8,7 @@ const debug = require('debug')('shop-sequelize:DB');
 
 const errorLogger = debug.extend('error');
 
+const User = require('./models/User');
 const indexRouter = require('./routes/index');
 const adminRouter = require('./routes/admin');
 const shopRouter = require('./routes/shop');
@@ -19,6 +20,7 @@ mongoose
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useFindAndModify: false,
+    useCreateIndex: true,
   })
   .catch((err) => {
     return errorLogger(err);
@@ -59,6 +61,21 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+app.use(async (req, res, next) => {
+  if (!req.user) {
+    try {
+      const user = await User.findById('5e18c887030deb304802a678');
+      req.user = user;
+      return next();
+    } catch (error) {
+      debug(error);
+      return next(error);
+    }
+  }
+  return next();
+});
+
 app.use('/', indexRouter);
 app.use('/shop', shopRouter);
 app.use('/admin', adminRouter);

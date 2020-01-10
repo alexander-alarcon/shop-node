@@ -3,7 +3,7 @@ const debug = require('debug')('shop-sequelize:DB');
 const mongoose = require('mongoose');
 const faker = require('faker');
 
-const Product = require('../models/Product');
+const User = require('../models/User');
 
 const errorLogger = debug.extend('error');
 
@@ -44,23 +44,19 @@ mongoose.connection.on('close', (err, res) => {
   debug('The DB was disconnected successfully');
 });
 
-async function seedProducts() {
-  const products = [];
+async function seedUsers() {
+  const users = [];
 
   for (let index = 0; index < 20; index += 1) {
-    products.push({
-      title: faker.commerce.productName(),
-      price: faker.commerce.price(),
-      description: faker.lorem.paragraphs(
-        Math.floor(Math.random() * (5 - 2 + 1)) + 2,
-      ),
-      imageUrl: 'https://via.placeholder.com/150',
+    users.push({
+      username: faker.internet.userName(),
+      email: faker.internet.email(),
     });
   }
 
   try {
-    await Product.insertMany(products);
-    debug('Products Inserted Succesfully');
+    await User.insertMany(users);
+    debug('users Inserted Succesfully');
   } catch (error) {
     errorLogger(error);
   } finally {
@@ -68,4 +64,4 @@ async function seedProducts() {
   }
 }
 
-seedProducts();
+seedUsers();
