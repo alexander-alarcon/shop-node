@@ -6,6 +6,7 @@ const {
   getProducts,
   deleteProduct,
   postAddProduct,
+  postEditProduct,
 } = require('../controllers/Admin');
 
 const router = express.Router();
@@ -14,6 +15,11 @@ const router = express.Router();
   GET /admin/products
 */
 router.get('/products', getProducts);
+
+/*
+  POST /admin/products
+*/
+router.post('/edit-product', postEditProduct);
 
 /*
   GET /admin/products/:productId

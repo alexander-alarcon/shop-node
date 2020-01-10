@@ -82,3 +82,25 @@ exports.deleteProduct = async (req, res, next) => {
     return next(error);
   }
 };
+
+exports.postEditProduct = async (req, res, next) => {
+  const { productId, title, price, imageUrl, description } = req.body;
+
+  try {
+    await Product.findByIdAndUpdate(
+      {
+        _id: productId,
+      },
+      {
+        title,
+        price,
+        imageUrl,
+        description,
+      },
+    );
+    return res.redirect('/admin/products');
+  } catch (error) {
+    debug(error);
+    return next(error);
+  }
+};
