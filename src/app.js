@@ -13,7 +13,7 @@ const adminRouter = require('./routes/admin');
 const shopRouter = require('./routes/shop');
 
 const url = `mongodb://${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}`;
-debug(url);
+
 mongoose
   .connect(url, {
     useNewUrlParser: true,
@@ -28,10 +28,6 @@ mongoose.connection.on('error', (err) => {
   errorLogger(err);
 });
 
-mongoose.connection.once('open', () => {
-  debug('Connection Openned');
-});
-
 mongoose.connection.on('connected', (err, res) => {
   if (err) {
     errorLogger(err);
@@ -40,6 +36,16 @@ mongoose.connection.on('connected', (err, res) => {
     debug(res);
   }
   debug('The DB was connected successfully');
+});
+
+mongoose.connection.on('close', (err, res) => {
+  if (err) {
+    errorLogger(err);
+  }
+  if (res) {
+    debug(res);
+  }
+  debug('The DB was disconnected successfully');
 });
 
 const app = express();

@@ -11,6 +11,7 @@
     "debug": "^4.1.1",
     "dotenv": "^8.2.0",
     "express": "~4.16.1",
+    "faker": "^4.1.0",
     "http-errors": "~1.6.3",
     "mongoose": "^5.8.6",
     "morgan": "~1.9.1",
@@ -22,7 +23,6 @@
     "eslint-config-prettier": "^6.8.0",
     "eslint-plugin-import": "^2.19.1",
     "eslint-plugin-prettier": "^3.1.2",
-    "faker": "^4.1.0",
     "nodemon": "^2.0.2",
     "prettier": "^1.19.1"
   }
