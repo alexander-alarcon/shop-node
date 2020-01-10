@@ -23,8 +23,10 @@ const router = express.Router();
 /*
   POST /admin/add-products
 */
-router.route('/add-product').get(getAddProduct);
-// .post(postAddProduct);
+router
+  .route('/add-product')
+  .get(getAddProduct)
+  .post(postAddProduct);
 
 // /*
 //   POST /admin/delete-product

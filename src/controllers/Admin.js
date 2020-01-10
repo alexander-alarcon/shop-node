@@ -1,6 +1,6 @@
 const debug = require('debug')('shop-sequelize:AdminController');
 
-// const { Product, sequelize } = require('../models');
+const Product = require('../models/Product');
 
 /* exports.getProducts = async (req, res, next) => {
   try {
@@ -51,27 +51,24 @@ exports.getAddProduct = async (req, res, next) => {
   });
 };
 
-/* exports.postAddProduct = async (req, res, next) => {
-  const transaction = await sequelize.transaction();
+exports.postAddProduct = async (req, res, next) => {
   try {
     const { title, price, imageUrl, description } = req.body;
-    await req.user.createProduct({
+    const product = new Product({
       title,
-      price,
+      price: +price,
       imageUrl,
       description,
     });
-    //    await Product.create({});
-    await transaction.commit();
+    await product.save();
     return res.redirect('/admin/products');
   } catch (error) {
     debug(error);
-    await transaction.rollback();
     return next(error);
   }
 };
 
-exports.deleteProduct = async (req, res, next) => {
+/* exports.deleteProduct = async (req, res, next) => {
   const { productId } = req.body;
   const transaction = await sequelize.transaction();
 
