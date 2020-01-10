@@ -10,17 +10,18 @@ const {
 
 const router = express.Router();
 
-// /*
-//   GET /admin/products
-// */
-// router.get('/products', getProducts);
-
-// /*
-//   GET /admin/products/:productId
-// */
-// router.get('/edit-product/:productId', getProduct);
+/*
+  GET /admin/products
+*/
+router.get('/products', getProducts);
 
 /*
+  GET /admin/products/:productId
+*/
+router.get('/edit-product/:productId', getProduct);
+
+/*
+  GET /admin/add-products
   POST /admin/add-products
 */
 router

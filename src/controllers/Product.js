@@ -1,8 +1,10 @@
 const debug = require('debug')('shop-sequelize:ProductController');
 
-/* exports.getProducts = async (req, res, next) => {
+const Product = require('../models/Product');
+
+exports.getProducts = async (req, res, next) => {
   try {
-    const products = await Product.findAll({ where: { isArchived: false } });
+    const products = await Product.find({ isArchived: false });
     return res.render('shop/index', {
       docTitle: 'admin/products',
       path: '/',
@@ -17,14 +19,16 @@ const debug = require('debug')('shop-sequelize:ProductController');
 exports.getProduct = async (req, res, next) => {
   const { productId } = req.params;
   try {
-    const product = await Product.findAll({
-      where: { id: productId, isArchived: false },
+    const product = await Product.findOne({
+      _id: productId,
+      isArchived: false,
     });
-    if (product.length > 0) {
+    console.log({ product, yolo: 'yolo' });
+    if (product) {
       return res.render('shop/product-detail', {
         docTitle: 'Shop',
         path: '/shop',
-        product: product[0],
+        product,
       });
     }
 
@@ -35,7 +39,7 @@ exports.getProduct = async (req, res, next) => {
   }
 };
 
-exports.getCart = async (req, res, next) => {
+/* exports.getCart = async (req, res, next) => {
   try {
     const cart = await req.user.getCart();
     const products = await cart.getProducts();

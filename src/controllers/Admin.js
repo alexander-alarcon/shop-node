@@ -2,11 +2,9 @@ const debug = require('debug')('shop-sequelize:AdminController');
 
 const Product = require('../models/Product');
 
-/* exports.getProducts = async (req, res, next) => {
+exports.getProducts = async (req, res, next) => {
   try {
-    const products = await req.user.getProducts({
-      where: { isArchived: false },
-    });
+    const products = await Product.find({ isArchived: false });
 
     return res.render('admin/index', {
       docTitle: 'Admin Products',
@@ -24,15 +22,15 @@ exports.getProduct = async (req, res, next) => {
   const { edit } = req.query;
 
   try {
-    const products = await req.user.getProducts({
-      where: { id: productId, isArchived: false },
+    const product = await Product.findOne({
+      _id: productId,
+      isArchived: false,
     });
-
-    if (products.length > 0) {
+    if (product) {
       return res.render('admin/edit-product', {
         docTitle: 'Edit Product',
         path: '/admin/products',
-        product: products[0],
+        product,
         editing: !!edit,
       });
     }
@@ -43,7 +41,7 @@ exports.getProduct = async (req, res, next) => {
     return next(error);
   }
 };
- */
+
 exports.getAddProduct = async (req, res, next) => {
   res.render('admin/edit-product', {
     docTitle: 'Add Product',

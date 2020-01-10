@@ -12,10 +12,10 @@ const {
 
 const router = express.Router();
 
-// /*
-//   GET /shop
-// */
-// router.get('/', getProducts);
+/*
+  GET /shop
+*/
+router.get('/', getProducts);
 
 // /*
 //   GET /shop/cart
@@ -41,9 +41,9 @@ const router = express.Router();
 // */
 // router.post('/create-order', postOrders);
 
-// /*
-//   GET /shop/:productId
-// */
-// router.get('/:productId', getProduct);
+/*
+  GET /shop/:productId
+*/
+router.get('/:productId', getProduct);
 
 module.exports = router;
