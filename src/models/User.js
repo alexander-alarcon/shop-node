@@ -1,4 +1,4 @@
-const { model, Schema } = require('mongoose');
+const { model, Schema, Types } = require('mongoose');
 
 const userSchema = new Schema({
   username: {
@@ -10,6 +10,21 @@ const userSchema = new Schema({
     type: String,
     required: true,
     unique: true,
+  },
+  cart: {
+    items: [
+      {
+        _id: false,
+        productId: {
+          type: Types.ObjectId,
+          ref: 'User',
+          required: true,
+        },
+        quantity: {
+          type: Number,
+        },
+      },
+    ],
   },
   isActive: {
     type: Boolean,

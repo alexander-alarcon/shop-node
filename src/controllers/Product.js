@@ -1,6 +1,8 @@
 const debug = require('debug')('shop-sequelize:ProductController');
+const { Types } = require('mongoose');
 
 const Product = require('../models/Product');
+const User = require('../models/User');
 
 exports.getProducts = async (req, res, next) => {
   try {
@@ -52,36 +54,55 @@ exports.getProduct = async (req, res, next) => {
     debug(error);
     return next(error);
   }
-};
+}; */
 
 exports.postAddCart = async (req, res, next) => {
-  const transaction = await sequelize.transaction();
   try {
-    let product;
     const { productId } = req.body;
-    const cart = await req.user.getCart();
-    const products = await cart.getProducts({ where: { id: productId } });
-    let newQuantity = 1;
-    if (products.length > 0) {
-      [product] = products;
-    }
-    if (product) {
-      const oldQuantity = product.CartItem.quantity;
-      newQuantity = oldQuantity + 1;
+    const { _id, cart } = req.user;
+    const { items = [] } = cart;
+    let updatedCart = {
+      ...cart,
+      items: [...items],
+    };
+    const productIndex = items.findIndex((el) => {
+      return el.productId.toString() === productId;
+    });
+    if (productIndex === -1) {
+      updatedCart = {
+        ...cart,
+        items: [
+          ...items,
+          { productId: Types.ObjectId(productId), quantity: 1 },
+        ],
+      };
     } else {
-      product = await Product.findByPk(productId);
+      const newQuantity = items[productIndex].quantity + 1;
+      updatedCart.items[productIndex] = {
+        productId: Types.ObjectId(productId),
+        quantity: newQuantity,
+      };
     }
-    await cart.addProduct(product, { through: { quantity: newQuantity } });
-    await transaction.commit();
-    return res.redirect('/shop/cart');
+
+    await User.findByIdAndUpdate(
+      _id,
+      {
+        $set: {
+          cart: updatedCart,
+        },
+      },
+      {
+        new: true,
+      },
+    );
+    return res.redirect('/shop');
   } catch (error) {
-    debug(error);
-    transaction.rollback();
+    // debug(error);
     return next(error);
   }
 };
 
-exports.postDeleteCart = async (req, res, next) => {
+/* exports.postDeleteCart = async (req, res, next) => {
   const transaction = await sequelize.transaction();
 
   try {

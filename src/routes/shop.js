@@ -17,14 +17,14 @@ const router = express.Router();
 */
 router.get('/', getProducts);
 
-// /*
-//   GET /shop/cart
-//   POST /shop/cart
-// */
-// router
-//   .route('/cart')
-//   .get(getCart)
-//   .post(postAddCart);
+/*
+  GET /shop/cart
+   POST /shop/cart
+*/
+router
+  .route('/cart')
+  //   .get(getCart)
+  .post(postAddCart);
 
 // /*
 //   POST /shop/cart-delete-item
