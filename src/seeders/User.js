@@ -9,6 +9,7 @@ const User = require('../models/User');
 const errorLogger = debug.extend('error');
 
 connect();
+
 async function seedUsers() {
   const users = [];
 

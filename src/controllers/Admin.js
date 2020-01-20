@@ -52,11 +52,14 @@ exports.getAddProduct = async (req, res, next) => {
 exports.postAddProduct = async (req, res, next) => {
   try {
     const { title, price, imageUrl, description } = req.body;
+    const { id } = req.user;
+    debug(id);
     const product = new Product({
       title,
       price: +price,
       imageUrl,
       description,
+      userId: id,
     });
     await product.save();
     return res.redirect('/admin/products');
