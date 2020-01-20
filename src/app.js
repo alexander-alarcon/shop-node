@@ -3,53 +3,15 @@ const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
-const mongoose = require('mongoose');
 const debug = require('debug')('shop-sequelize:DB');
 
-const errorLogger = debug.extend('error');
-
 const User = require('./models/User');
+const connect = require('./utils/database');
 const indexRouter = require('./routes/index');
 const adminRouter = require('./routes/admin');
 const shopRouter = require('./routes/shop');
 
-const url = `mongodb://${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}`;
-
-mongoose
-  .connect(url, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    useFindAndModify: false,
-    useCreateIndex: true,
-  })
-  .catch((err) => {
-    return errorLogger(err);
-  });
-
-mongoose.connection.on('error', (err) => {
-  errorLogger(err);
-});
-
-mongoose.connection.on('connected', (err, res) => {
-  if (err) {
-    errorLogger(err);
-  }
-  if (res) {
-    debug(res);
-  }
-  debug('The DB was connected successfully');
-});
-
-mongoose.connection.on('close', (err, res) => {
-  if (err) {
-    errorLogger(err);
-  }
-  if (res) {
-    debug(res);
-  }
-  debug('The DB was disconnected successfully');
-});
-
+connect();
 const app = express();
 
 // view engine setup
