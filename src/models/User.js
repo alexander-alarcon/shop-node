@@ -70,7 +70,28 @@ async function addToCart(productId) {
   return this;
 }
 
+async function getCart() {
+  const user = await this.model('User').findOne({ _id: this._id });
+  const productIds = user.cart.items.map((item) => {
+    return item.productId;
+  });
+  const products = await this.model('Product').find({
+    _id: {
+      $in: productIds,
+    },
+  });
+  return products.map((product) => {
+    return {
+      ...product._doc,
+      quantity: user.cart.items.find((el) => {
+        return el.productId.toString() === product.id.toString();
+      }).quantity,
+    };
+  });
+}
+
 userSchema.methods.addToCart = addToCart;
+userSchema.methods.getCart = getCart;
 
 const User = model('User', userSchema);
 

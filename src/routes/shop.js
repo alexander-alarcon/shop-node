@@ -23,7 +23,7 @@ router.get('/', getProducts);
 */
 router
   .route('/cart')
-  //   .get(getCart)
+  .get(getCart)
   .post(postAddCart);
 
 // /*

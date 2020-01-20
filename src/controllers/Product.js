@@ -39,27 +39,25 @@ exports.getProduct = async (req, res, next) => {
   }
 };
 
-/* exports.getCart = async (req, res, next) => {
+exports.getCart = async (req, res, next) => {
   try {
     const cart = await req.user.getCart();
-    const products = await cart.getProducts();
     return res.render('shop/cart', {
       docTitle: 'Cart',
       path: '/cart',
-      products,
+      products: cart,
     });
   } catch (error) {
     debug(error);
     return next(error);
   }
-}; */
+};
 
 exports.postAddCart = async (req, res, next) => {
   try {
     const { productId } = req.body;
-    const newCart = await req.user.addToCart(productId);
-    return res.json(newCart);
-    // return res.redirect('/shop');
+    await req.user.addToCart(productId);
+    return res.redirect('/shop/cart');
   } catch (error) {
     // debug(error);
     return next(error);
