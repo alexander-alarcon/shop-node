@@ -1,8 +1,6 @@
 const debug = require('debug')('shop-sequelize:ProductController');
-const { Types } = require('mongoose');
 
 const Product = require('../models/Product');
-const User = require('../models/User');
 
 exports.getProducts = async (req, res, next) => {
   try {
@@ -59,43 +57,9 @@ exports.getProduct = async (req, res, next) => {
 exports.postAddCart = async (req, res, next) => {
   try {
     const { productId } = req.body;
-    const { _id, cart } = req.user;
-    const { items = [] } = cart;
-    let updatedCart = {
-      ...cart,
-      items: [...items],
-    };
-    const productIndex = items.findIndex((el) => {
-      return el.productId.toString() === productId;
-    });
-    if (productIndex === -1) {
-      updatedCart = {
-        ...cart,
-        items: [
-          ...items,
-          { productId: Types.ObjectId(productId), quantity: 1 },
-        ],
-      };
-    } else {
-      const newQuantity = items[productIndex].quantity + 1;
-      updatedCart.items[productIndex] = {
-        productId: Types.ObjectId(productId),
-        quantity: newQuantity,
-      };
-    }
-
-    await User.findByIdAndUpdate(
-      _id,
-      {
-        $set: {
-          cart: updatedCart,
-        },
-      },
-      {
-        new: true,
-      },
-    );
-    return res.redirect('/shop');
+    const newCart = await req.user.addToCart(productId);
+    return res.json(newCart);
+    // return res.redirect('/shop');
   } catch (error) {
     // debug(error);
     return next(error);
