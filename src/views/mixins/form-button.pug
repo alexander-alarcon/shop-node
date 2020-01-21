@@ -7,7 +7,7 @@ mixin formButton(action, textButton, product, btnType='primary')
     action=`${ action }`
     method='POST'
   )
-    input(type='hidden', name='productId' value=`${ product.id }`)
+    input(type='hidden', name='productId' value=`${ product._id }`)
     button.px-4.py-2.cursor-pointer.rounded(
       type='sumbit'
       class=`${CLASSES[btnType]}`

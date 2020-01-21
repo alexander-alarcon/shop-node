@@ -90,8 +90,34 @@ async function getCart() {
   });
 }
 
+async function deleteFromCart(productId) {
+  const { _id, cart } = this;
+  const { items = [] } = cart;
+  const newItems = items.filter((el) => {
+    return el.productId.toString() !== productId.toString();
+  });
+  const updatedCart = {
+    items: newItems,
+  };
+
+  await this.model('User').findByIdAndUpdate(
+    _id,
+    {
+      $set: {
+        cart: updatedCart,
+      },
+    },
+    {
+      new: true,
+    },
+  );
+
+  return this;
+}
+
 userSchema.methods.addToCart = addToCart;
 userSchema.methods.getCart = getCart;
+userSchema.methods.deleteFromCart = deleteFromCart;
 
 const User = model('User', userSchema);
 

@@ -59,33 +59,23 @@ exports.postAddCart = async (req, res, next) => {
     await req.user.addToCart(productId);
     return res.redirect('/shop/cart');
   } catch (error) {
-    // debug(error);
+    debug(error);
     return next(error);
   }
 };
 
-/* exports.postDeleteCart = async (req, res, next) => {
-  const transaction = await sequelize.transaction();
-
+exports.postDeleteCart = async (req, res, next) => {
   try {
-    let product;
     const { productId } = req.body;
-    const cart = await req.user.getCart();
-    const products = await cart.getProducts({ where: { id: productId } });
-    if (products.length > 0) {
-      [product] = products;
-      await product.CartItem.destroy();
-    }
-    await transaction.commit();
+    await req.user.deleteFromCart(productId);
     return res.redirect('/shop/cart');
   } catch (error) {
     debug(error);
-    await transaction.rollback();
     return next(error);
   }
 };
 
-exports.getOrders = async (req, res, next) => {
+/* exports.getOrders = async (req, res, next) => {
   try {
     const orders = await req.user.getOrders({ include: ['Products'] });
     return res.render('shop/order', {

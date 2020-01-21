@@ -26,10 +26,10 @@ router
   .get(getCart)
   .post(postAddCart);
 
-// /*
-//   POST /shop/cart-delete-item
-// */
-// router.post('/cart-delete-item', postDeleteCart);
+/*
+  POST /shop/cart-delete-item
+*/
+router.post('/cart-delete-item', postDeleteCart);
 
 // /*
 //   GET /shop/orders
