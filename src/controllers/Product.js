@@ -75,9 +75,9 @@ exports.postDeleteCart = async (req, res, next) => {
   }
 };
 
-/* exports.getOrders = async (req, res, next) => {
+exports.getOrders = async (req, res, next) => {
   try {
-    const orders = await req.user.getOrders({ include: ['Products'] });
+    const orders = await req.user.getOrders();
     return res.render('shop/order', {
       docTitle: 'Orders',
       path: '/shop/orders',
@@ -90,24 +90,11 @@ exports.postDeleteCart = async (req, res, next) => {
 };
 
 exports.postOrders = async (req, res, next) => {
-  const transaction = await sequelize.transaction();
   try {
-    const cart = await req.user.getCart();
-    const products = await cart.getProducts();
-    const order = await req.user.createOrder();
-    await order.addProducts(
-      products.map((product) => {
-        product.OrderItem = { quantity: product.CartItem.quantity };
-        return product;
-      }),
-    );
-    await cart.setProducts(null);
-    await transaction.commit();
+    await req.user.addOrder();
     return res.redirect('/shop/orders');
   } catch (error) {
     debug(error);
-    await transaction.rollback();
     return next(error);
   }
 };
- */

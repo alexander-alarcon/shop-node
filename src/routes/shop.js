@@ -31,15 +31,15 @@ router
 */
 router.post('/cart-delete-item', postDeleteCart);
 
-// /*
-//   GET /shop/orders
-// */
-// router.get('/orders', getOrders);
+/*
+  GET /shop/orders
+*/
+router.get('/orders', getOrders);
 
-// /*
-//   POST /shop/create-order
-// */
-// router.post('/create-order', postOrders);
+/*
+  POST /shop/create-order
+*/
+router.post('/create-order', postOrders);
 
 /*
   GET /shop/:productId

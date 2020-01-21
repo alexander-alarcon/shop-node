@@ -1,4 +1,5 @@
 const { model, Schema, Types } = require('mongoose');
+const Order = require('./Order');
 
 const userSchema = new Schema({
   username: {
@@ -17,7 +18,7 @@ const userSchema = new Schema({
         _id: false,
         productId: {
           type: Types.ObjectId,
-          ref: 'User',
+          ref: 'Product',
           required: true,
         },
         quantity: {
@@ -81,8 +82,11 @@ async function getCart() {
     },
   });
   return products.map((product) => {
+    const { _id: productId, title, price } = product._doc;
     return {
-      ...product._doc,
+      productId: Types.ObjectId(productId),
+      title,
+      price,
       quantity: user.cart.items.find((el) => {
         return el.productId.toString() === product.id.toString();
       }).quantity,
@@ -115,9 +119,36 @@ async function deleteFromCart(productId) {
   return this;
 }
 
+async function addOrder() {
+  const { _id, username, email } = this;
+  const cartItems = await this.getCart();
+  await Order.create({
+    items: cartItems,
+    user: {
+      userId: Types.ObjectId(_id),
+      username,
+      email,
+    },
+  });
+
+  this.cart = { items: [] };
+  await this.save();
+}
+
+async function getOrders() {
+  const { _id } = this;
+  const orders = await Order.find({
+    'user.userId': Types.ObjectId(_id),
+  });
+
+  return orders;
+}
+
 userSchema.methods.addToCart = addToCart;
 userSchema.methods.getCart = getCart;
 userSchema.methods.deleteFromCart = deleteFromCart;
+userSchema.methods.addOrder = addOrder;
+userSchema.methods.getOrders = getOrders;
 
 const User = model('User', userSchema);
 
