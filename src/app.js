@@ -10,6 +10,7 @@ const connect = require('./utils/database');
 const indexRouter = require('./routes/index');
 const adminRouter = require('./routes/admin');
 const shopRouter = require('./routes/shop');
+const authRouter = require('./routes/auth');
 
 connect();
 const app = express();
@@ -39,6 +40,7 @@ app.use(async (req, res, next) => {
 });
 
 app.use('/', indexRouter);
+app.use('/auth', authRouter);
 app.use('/shop', shopRouter);
 app.use('/admin', adminRouter);
 

@@ -37,16 +37,21 @@ body(style='font-family: "Montserrat", sans-serif;')
             class=(path==='/shop/orders' ? 'text-yellow-500' : '')
             class=('md:mt-0 hover:text-yellow-500 active:text-yellow-500')
           ) Orders
-          a.block.mt-4.text-white.text-center.mr-4(
+          //- a.block.mt-4.text-white.text-center.mr-4(
             href='/admin/add-product'
             class=(path==='/admin/add-product' ? 'text-yellow-500' : '')
             class=('md:mt-0 hover:text-yellow-500 active:text-yellow-500')
-          ) Add Product
-          a.block.mt-4.text-white.text-center.mr-4(
+          //- ) Add Product
+          //- a.block.mt-4.text-white.text-center.mr-4(
             href='/admin/products'
             class=(path==='/admin/products' ? 'text-yellow-500' : '')
             class=('md:mt-0 hover:text-yellow-500 active:text-yellow-500')
-          ) Admin Products
+          //- ) Admin Products
+          a.block.mt-4.text-white.text-center.mr-4(
+            href='/auth/login'
+            class=(path==='/auth/login' ? 'text-yellow-500' : '')
+            class=('md:mt-0 hover:text-yellow-500 active:text-yellow-500')
+          ) Login
 
   main.p-4    
     block content
