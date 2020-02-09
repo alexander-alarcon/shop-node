@@ -11,9 +11,9 @@ block content
               th.px-4.py-2.border.border-teal-800 Product
               th.px-4.py-2.border.border-teal-800 Quantity
           tbody
-            each product in order.items
+            each item in order.items
               tr 
-                td.px-4.py-2.border.border-teal-800 #{ product.title }
-                td.px-4.py-2.border.border-teal-800.text-center #{ product.quantity }
+                td.px-4.py-2.border.border-teal-800 #{ item.product.title }
+                td.px-4.py-2.border.border-teal-800.text-center #{ item.quantity }
     else
       p No Orders

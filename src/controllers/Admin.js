@@ -53,7 +53,6 @@ exports.postAddProduct = async (req, res, next) => {
   try {
     const { title, price, imageUrl, description } = req.body;
     const { id } = req.user;
-    debug(id);
     const product = new Product({
       title,
       price: +price,
@@ -73,12 +72,9 @@ exports.deleteProduct = async (req, res, next) => {
   const { productId } = req.body;
 
   try {
-    await Product.findByIdAndUpdate(
-      { _id: productId },
-      {
-        isArchived: true,
-      },
-    );
+    await Product.findByIdAndUpdate(productId, {
+      isArchived: true,
+    });
     return res.redirect('/admin/products');
   } catch (error) {
     debug(error);
@@ -90,17 +86,12 @@ exports.postEditProduct = async (req, res, next) => {
   const { productId, title, price, imageUrl, description } = req.body;
 
   try {
-    await Product.findByIdAndUpdate(
-      {
-        _id: productId,
-      },
-      {
-        title,
-        price,
-        imageUrl,
-        description,
-      },
-    );
+    await Product.findByIdAndUpdate(productId, {
+      title,
+      price,
+      imageUrl,
+      description,
+    });
     return res.redirect('/admin/products');
   } catch (error) {
     debug(error);

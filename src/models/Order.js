@@ -1,24 +1,14 @@
 const { model, Schema, Types } = require('mongoose');
 
+const Product = require('./Product');
+
 const orderSchema = new Schema({
   items: [
     {
-      _id: false,
-      productId: {
-        type: Types.ObjectId,
-        ref: 'Product',
-        required: true,
-      },
-      title: {
-        type: String,
-        required: true,
-      },
-      price: {
-        type: Number,
-        required: true,
-      },
+      product: Product.schema,
       quantity: {
         type: Number,
+        required: true,
       },
     },
   ],

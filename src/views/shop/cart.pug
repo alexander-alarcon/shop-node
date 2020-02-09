@@ -12,10 +12,10 @@ block content
         tbody
           each product in products
             tr 
-              td.px-4.py-2.border.border-teal-800 #{ product.title }
+              td.px-4.py-2.border.border-teal-800 #{ product.productId.title }
               td.px-4.py-2.border.border-teal-800.text-center #{ product.quantity }
               td.px-4.py-2.border.border-teal-800
-                +formButton('/shop/cart-delete-item', 'Remove', product, 'danger')
+                +formButton('/shop/cart-delete-item', 'Remove', product.productId, 'danger')
         tfoot
           tr
             td.px-4.py-2.border.border-teal-800.text-center(colspan=3)

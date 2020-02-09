@@ -15,7 +15,6 @@ const userSchema = new Schema({
   cart: {
     items: [
       {
-        _id: false,
         productId: {
           type: Types.ObjectId,
           ref: 'Product',
@@ -34,7 +33,7 @@ const userSchema = new Schema({
 });
 
 async function addToCart(productId) {
-  const { _id, cart } = this;
+  const { cart } = this;
   const { items = [] } = cart;
   let updatedCart = {
     ...cart,
@@ -56,72 +55,39 @@ async function addToCart(productId) {
     };
   }
 
-  await this.model('User').findByIdAndUpdate(
-    _id,
-    {
-      $set: {
-        cart: updatedCart,
-      },
-    },
-    {
-      new: true,
-    },
-  );
+  this.cart = updatedCart;
+  await this.save();
 
   return this;
 }
 
 async function getCart() {
-  const user = await this.model('User').findOne({ _id: this._id });
-  const productIds = user.cart.items.map((item) => {
-    return item.productId;
-  });
-  const products = await this.model('Product').find({
-    _id: {
-      $in: productIds,
-    },
-  });
-  return products.map((product) => {
-    const { _id: productId, title, price } = product._doc;
-    return {
-      productId: Types.ObjectId(productId),
-      title,
-      price,
-      quantity: user.cart.items.find((el) => {
-        return el.productId.toString() === product.id.toString();
-      }).quantity,
-    };
-  });
+  const { _id } = this;
+  const user = await this.model('User')
+    .findById(_id)
+    .populate('cart.items.productId');
+  return user.cart.items;
 }
 
 async function deleteFromCart(productId) {
-  const { _id, cart } = this;
+  const { cart } = this;
   const { items = [] } = cart;
   const newItems = items.filter((el) => {
     return el.productId.toString() !== productId.toString();
   });
-  const updatedCart = {
-    items: newItems,
-  };
 
-  await this.model('User').findByIdAndUpdate(
-    _id,
-    {
-      $set: {
-        cart: updatedCart,
-      },
-    },
-    {
-      new: true,
-    },
-  );
+  this.cart.items = newItems;
+  await this.save();
 
   return this;
 }
 
 async function addOrder() {
   const { _id, username, email } = this;
-  const cartItems = await this.getCart();
+  const cart = await this.getCart();
+  const cartItems = cart.map((el) => {
+    return { quantity: el.quantity, product: { ...el.productId._doc } };
+  });
   await Order.create({
     items: cartItems,
     user: {
@@ -139,7 +105,7 @@ async function getOrders() {
   const { _id } = this;
   const orders = await Order.find({
     'user.userId': Types.ObjectId(_id),
-  });
+  }).populate('items.productId');
 
   return orders;
 }
