@@ -10,6 +10,7 @@ exports.getProducts = async (req, res, next) => {
       docTitle: 'Admin Products',
       path: '/admin/products',
       products,
+      isAuthenticated: req.session.isAuthenticated === true,
     });
   } catch (error) {
     debug('%O', error);
@@ -32,6 +33,7 @@ exports.getProduct = async (req, res, next) => {
         path: '/admin/products',
         product,
         editing: !!edit,
+        isAuthenticated: req.session.isAuthenticated === true,
       });
     }
 
@@ -46,6 +48,7 @@ exports.getAddProduct = async (req, res, next) => {
   return res.render('admin/edit-product', {
     docTitle: 'Add Product',
     path: '/admin/add-product',
+    isAuthenticated: req.session.isAuthenticated === true,
   });
 };
 

@@ -4,6 +4,8 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const debug = require('debug')('shop-sequelize:DB');
+const session = require('express-session');
+const MongoStore = require('connect-mongo')(session);
 
 const User = require('./models/User');
 const connect = require('./utils/database');
@@ -12,7 +14,7 @@ const adminRouter = require('./routes/admin');
 const shopRouter = require('./routes/shop');
 const authRouter = require('./routes/auth');
 
-connect();
+const mongo = connect();
 const app = express();
 
 // view engine setup
@@ -24,6 +26,15 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+app.use(
+  session({
+    secret: process.env.SESSION,
+    resave: false,
+    saveUninitialized: false,
+    store: new MongoStore({ mongooseConnection: mongo.connection }),
+  }),
+);
 
 app.use(async (req, res, next) => {
   if (!req.user) {

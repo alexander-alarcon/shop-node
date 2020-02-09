@@ -5,7 +5,6 @@ const errorLogger = debug.extend('error');
 
 function connect() {
   const url = `mongodb://${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}`;
-  debug(url);
 
   mongoose
     .connect(url, {
@@ -41,6 +40,8 @@ function connect() {
     }
     debug('The DB was disconnected successfully');
   });
+
+  return mongoose;
 }
 
 module.exports = connect;

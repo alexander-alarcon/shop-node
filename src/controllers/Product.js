@@ -9,6 +9,7 @@ exports.getProducts = async (req, res, next) => {
       docTitle: 'admin/products',
       path: '/',
       products,
+      isAuthenticated: req.session.isAuthenticated === true,
     });
   } catch (error) {
     debug('%O', error);
@@ -29,6 +30,7 @@ exports.getProduct = async (req, res, next) => {
         docTitle: 'Shop',
         path: '/shop',
         product,
+        isAuthenticated: req.session.isAuthenticated === true,
       });
     }
 
@@ -46,6 +48,7 @@ exports.getCart = async (req, res, next) => {
       docTitle: 'Cart',
       path: '/cart',
       products: cart,
+      isAuthenticated: req.session.isAuthenticated === true,
     });
   } catch (error) {
     debug(error);
@@ -82,6 +85,7 @@ exports.getOrders = async (req, res, next) => {
       docTitle: 'Orders',
       path: '/shop/orders',
       orders,
+      isAuthenticated: req.session.isAuthenticated === true,
     });
   } catch (error) {
     debug(error);
