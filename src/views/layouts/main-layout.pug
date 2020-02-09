@@ -48,11 +48,18 @@ body(style='font-family: "Montserrat", sans-serif;')
               class=(path==='/admin/products' ? 'text-yellow-500' : '')
               class=('md:mt-0 hover:text-yellow-500 active:text-yellow-500')
             ) Admin Products
-          a.block.mt-4.text-white.text-center.mr-4(
-            href='/auth/login'
-            class=(path==='/auth/login' ? 'text-yellow-500' : '')
-            class=('md:mt-0 hover:text-yellow-500 active:text-yellow-500')
-          ) Login
+            form.flex.justify-center(action="/auth/logout" method="POST")
+              button.block.mt-4.text-white.text-center.mr-4(
+                type="submit"
+                class=(path==='/auth/login' ? 'text-yellow-500' : '')
+                class=('md:mt-0 hover:text-yellow-500 active:text-yellow-500')
+              ) Logout
+          else
+            a.block.mt-4.text-white.text-center.mr-4(
+              href='/auth/login'
+              class=(path==='/auth/login' ? 'text-yellow-500' : '')
+              class=('md:mt-0 hover:text-yellow-500 active:text-yellow-500')
+            ) Login
 
   main.p-4    
     block content

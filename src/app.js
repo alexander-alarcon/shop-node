@@ -32,7 +32,11 @@ app.use(
     secret: process.env.SESSION,
     resave: false,
     saveUninitialized: false,
-    store: new MongoStore({ mongooseConnection: mongo.connection }),
+    store: new MongoStore({
+      mongooseConnection: mongo.connection,
+      autoRemove: 'native',
+    }),
+    unset: 'destroy',
   }),
 );
 

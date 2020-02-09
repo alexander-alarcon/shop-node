@@ -10,3 +10,9 @@ exports.postLogin = (req, res) => {
   req.session.isAuthenticated = true;
   res.redirect('/shop/');
 };
+
+exports.postLogout = (req, res) => {
+  req.session.destroy(req.session.sid);
+  res.clearCookie('connect.sid');
+  res.redirect('/shop/');
+};
