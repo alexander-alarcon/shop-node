@@ -41,9 +41,9 @@ app.use(
 );
 
 app.use(async (req, res, next) => {
-  if (!req.user) {
+  if (req.session.user) {
     try {
-      const user = await User.findOne({});
+      const user = await User.findById(req.session.user._id);
       req.user = user;
       return next();
     } catch (error) {

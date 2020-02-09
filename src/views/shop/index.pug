@@ -17,9 +17,10 @@ block content
             button.mx-2.px-4.py-2.border.border-teal-800.bg-white.text-teal-800.cursor-pointer.rounded(
               type='button'
               class='hover:bg-teal-800 hover:text-white active:bg-teal-800 active:text-white'
-              onclick=`getDetails('${ product.id }')`
+              onclick=`getDetails('${ product._id }')`
             )
               | Details
-            +formButton('/shop/cart', 'Add to Cart', product)
+            if (isAuthenticated)
+              +formButton('/shop/cart', 'Add to Cart', product)
   else
     h3 No Products!

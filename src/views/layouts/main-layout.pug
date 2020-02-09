@@ -27,17 +27,17 @@ body(style='font-family: "Montserrat", sans-serif;')
             class=(path==='/' ? 'text-yellow-500' : '')
             class=('md:mt-0 hover:text-yellow-500 active:text-yellow-500')
           ) Shop
-          a.block.mt-4.text-white.text-center.mr-4(
-            href='/shop/cart'
-            class=(path==='/cart' ? 'text-yellow-500' : '')
-            class=('md:mt-0 hover:text-yellow-500 active:text-yellow-500')
-          ) Cart
-          a.block.mt-4.text-white.text-center.mr-4(
-            href='/shop/orders'
-            class=(path==='/shop/orders' ? 'text-yellow-500' : '')
-            class=('md:mt-0 hover:text-yellow-500 active:text-yellow-500')
-          ) Orders
           if (isAuthenticated)
+            a.block.mt-4.text-white.text-center.mr-4(
+              href='/shop/cart'
+              class=(path==='/cart' ? 'text-yellow-500' : '')
+              class=('md:mt-0 hover:text-yellow-500 active:text-yellow-500')
+            ) Cart
+            a.block.mt-4.text-white.text-center.mr-4(
+              href='/shop/orders'
+              class=(path==='/shop/orders' ? 'text-yellow-500' : '')
+              class=('md:mt-0 hover:text-yellow-500 active:text-yellow-500')
+            ) Orders
             a.block.mt-4.text-white.text-center.mr-4(
               href='/admin/add-product'
               class=(path==='/admin/add-product' ? 'text-yellow-500' : '')
