@@ -32,3 +32,11 @@ exports.postLogout = (req, res) => {
   res.clearCookie('connect.sid');
   res.redirect('/shop/');
 };
+
+exports.getSignUp = async (req, res, next) => {
+  return res.render('auth/signup', {
+    path: '/auth/signup',
+    docTitle: 'Sign Up',
+    isAuthenticated: req.session.isAuthenticated === true,
+  });
+};

@@ -1,0 +1,50 @@
+extends ../layouts/main-layout.pug
+
+block content
+  form.max-w-full.m-auto(
+    action='/auth/signup'
+    method='POST'
+    class='w-11/12'
+  )    
+    .my-4
+      label.block.w-full(for='title')
+        | First Name
+        input#title.w-full.block.px-4.py-2.border.border-solid.border-teal-800.rounded.outline-none(
+          type='text'
+          name='firstName'
+        )
+
+    .my-4
+      label.block.w-full(for='title')
+        | Last Name
+        input#title.w-full.block.px-4.py-2.border.border-solid.border-teal-800.rounded.outline-none(
+          type='text'
+          name='lastName'
+        )
+
+    .my-4
+      label.block.w-full(for='title')
+        | email
+        input#title.w-full.block.px-4.py-2.border.border-solid.border-teal-800.rounded.outline-none(
+          type='email'
+          name='email'
+        )
+
+    .my-4
+      label.block.w-full(for='password')
+        | Password
+        input#password.w-full.block.px-4.py-2.border.border-solid.border-teal-800.rounded.outline-none(
+          type='password'
+          name='password'
+        )
+
+    .my-4
+      label.block.w-full(for='confirmPassword')
+        | Confirm Password
+        input#confirmPassword.w-full.block.px-4.py-2.border.border-solid.border-teal-800.rounded.outline-none(
+          type='password'
+          name='confrimPassword'
+        )
+
+    .my-4
+      +button('Sign Up')

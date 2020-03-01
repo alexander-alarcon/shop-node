@@ -13,3 +13,10 @@ mixin formButton(action, textButton, product, btnType='primary')
       class=`${CLASSES[btnType]}`
     ) 
       | #{ textButton }
+
+mixin button(textButton, btnType='primary')
+  button.px-4.py-2.cursor-pointer.rounded(
+    type='sumbit'
+    class=`${CLASSES[btnType]}`
+  ) 
+    | #{ textButton }

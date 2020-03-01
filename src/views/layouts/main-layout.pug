@@ -60,6 +60,11 @@ body(style='font-family: "Montserrat", sans-serif;')
               class=(path==='/auth/login' ? 'text-yellow-500' : '')
               class=('md:mt-0 hover:text-yellow-500 active:text-yellow-500')
             ) Login
+            a.block.mt-4.text-white.text-center.mr-4(
+              href='/auth/signup'
+              class=(path==='/auth/signup' ? 'text-yellow-500' : '')
+              class=('md:mt-0 hover:text-yellow-500 active:text-yellow-500')
+            ) Sign Up
 
   main.p-4    
     block content
