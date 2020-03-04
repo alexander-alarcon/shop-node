@@ -41,7 +41,7 @@ app.use(
 );
 
 app.use(async (req, res, next) => {
-  if (req.session.user) {
+  if (req.session.user && !req.user) {
     try {
       const user = await User.findById(req.session.user._id);
       req.user = user;
@@ -52,6 +52,11 @@ app.use(async (req, res, next) => {
     }
   }
   return next();
+});
+
+app.use((req, res, next) => {
+  res.locals.isAuthenticated = req.session.isAuthenticated;
+  next();
 });
 
 app.use('/', indexRouter);

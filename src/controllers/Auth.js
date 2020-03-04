@@ -1,4 +1,5 @@
 const debug = require('debug')('shop-sequelize:AuthController');
+const bcrypt = require('bcrypt');
 
 const User = require('../models/User');
 
@@ -12,15 +13,25 @@ exports.getLogin = (req, res) => {
 
 exports.postLogin = async (req, res, next) => {
   try {
-    const user = await User.findOne({});
-    req.user = user;
-    req.session.isAuthenticated = true;
-    req.session.save((err) => {
-      if (err) {
-        next(err);
-      }
-      return res.redirect('/shop');
-    });
+    const { email, password } = req.body;
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.redirect('/auth/login');
+    }
+    const isRightPassword = await bcrypt.compare(password, user.password);
+
+    if (isRightPassword) {
+      req.session.isAuthenticated = true;
+      req.session.user = user;
+      req.session.save((err) => {
+        if (err) {
+          next(err);
+        }
+        return res.redirect('/shop');
+      });
+    } else {
+      return res.redirect('/auth/login');
+    }
   } catch (error) {
     debug(error);
     return next(error);
