@@ -1,3 +1,4 @@
+const uniqueValidator = require('mongoose-unique-validator');
 const { model, Schema, Types } = require('mongoose');
 const bcrypt = require('bcrypt');
 
@@ -110,10 +111,16 @@ async function getOrders() {
   return orders;
 }
 
+userSchema.plugin(uniqueValidator, {
+  message: 'Email already taken',
+});
+
 userSchema.pre('save', async function() {
-  const saltRounds = +process.env.SALT_ROUNDS;
-  const hash = await bcrypt.hash(this.password, saltRounds);
-  this.password = hash;
+  if (this.isNew || this.isModified('password')) {
+    const saltRounds = +process.env.SALT_ROUNDS;
+    const hash = await bcrypt.hash(this.password, saltRounds);
+    this.password = hash;
+  }
 });
 
 userSchema.methods.addToCart = addToCart;
