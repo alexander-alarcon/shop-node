@@ -6,6 +6,7 @@ const logger = require('morgan');
 const debug = require('debug')('shop-sequelize:DB');
 const session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
+const csrf = require('csurf');
 
 const User = require('./models/User');
 const connect = require('./utils/database');
@@ -16,6 +17,7 @@ const authRouter = require('./routes/auth');
 
 const mongo = connect();
 const app = express();
+const csrfProtection = csrf();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -39,7 +41,7 @@ app.use(
     unset: 'destroy',
   }),
 );
-
+app.use(csrfProtection);
 app.use(async (req, res, next) => {
   if (req.session.user && !req.user) {
     try {
@@ -56,6 +58,7 @@ app.use(async (req, res, next) => {
 
 app.use((req, res, next) => {
   res.locals.isAuthenticated = req.session.isAuthenticated;
+  res.locals.csrfToken = req.csrfToken();
   next();
 });
 

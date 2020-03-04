@@ -49,6 +49,7 @@ body(style='font-family: "Montserrat", sans-serif;')
               class=('md:mt-0 hover:text-yellow-500 active:text-yellow-500')
             ) Admin Products
             form.flex.justify-center(action="/auth/logout" method="POST")
+              input(type='hidden', name='_csrf' value=`${ csrfToken }`)
               button.block.mt-4.text-white.text-center.mr-4(
                 type="submit"
                 class=(path==='/auth/login' ? 'text-yellow-500' : '')
