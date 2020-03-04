@@ -7,6 +7,7 @@ const debug = require('debug')('shop-sequelize:DB');
 const session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
 const csrf = require('csurf');
+const flash = require('connect-flash');
 
 const User = require('./models/User');
 const connect = require('./utils/database');
@@ -61,6 +62,8 @@ app.use((req, res, next) => {
   res.locals.csrfToken = req.csrfToken();
   next();
 });
+
+app.use(flash());
 
 app.use('/', indexRouter);
 app.use('/auth', authRouter);
