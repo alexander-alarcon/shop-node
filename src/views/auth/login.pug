@@ -8,20 +8,18 @@ block content
   )    
     .my-4
       label.block.w-full(for='title')
-        | Username
+        | Email
         input#title.w-full.block.px-4.py-2.border.border-solid.border-teal-800.rounded.outline-none(
-          type='text'
-          name='title'
-          value=`${editing ? product.title : ''}`
+          type='email'
+          name='email'
         )
 
     .my-4
-      label.block.w-full(for='imageUrl')
+      label.block.w-full(for='password')
         | Password
-        input#imageUrl.w-full.block.px-4.py-2.border.border-solid.border-teal-800.rounded.outline-none(
+        input#password.w-full.block.px-4.py-2.border.border-solid.border-teal-800.rounded.outline-none(
           type='password'
-          name='imageUrl'
-          value=`${editing ? product.imageUrl : ''}`
+          name='password'
         )
 
     .my-4

@@ -40,3 +40,24 @@ exports.getSignUp = async (req, res, next) => {
     isAuthenticated: req.session.isAuthenticated === true,
   });
 };
+
+exports.postSignUp = async (req, res, next) => {
+  try {
+    const { firstName, lastName, email, password, confirmPassword } = req.body;
+    const user = await User.findOne({ where: { email } });
+    if (user) {
+      return res.redirect('/auth/login');
+    }
+    const newUser = await new User({
+      firstName,
+      lastName,
+      email,
+      password,
+    });
+    await newUser.save();
+    return res.redirect('/auth/login');
+  } catch (error) {
+    debug(error);
+    next(error);
+  }
+};

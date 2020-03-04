@@ -15,7 +15,6 @@ async function seedUsers() {
 
   for (let index = 0; index < 20; index += 1) {
     users.push({
-      username: faker.internet.userName(),
       email: faker.internet.email(),
     });
   }

@@ -1,12 +1,9 @@
 const { model, Schema, Types } = require('mongoose');
+const bcrypt = require('bcrypt');
+
 const Order = require('./Order');
 
 const userSchema = new Schema({
-  username: {
-    type: String,
-    required: true,
-    unique: true,
-  },
   email: {
     type: String,
     required: true,
@@ -29,6 +26,10 @@ const userSchema = new Schema({
   isActive: {
     type: Boolean,
     default: true,
+  },
+  password: {
+    type: String,
+    required: true,
   },
 });
 
@@ -83,7 +84,7 @@ async function deleteFromCart(productId) {
 }
 
 async function addOrder() {
-  const { _id, username, email } = this;
+  const { _id, email } = this;
   const cart = await this.getCart();
   const cartItems = cart.map((el) => {
     return { quantity: el.quantity, product: { ...el.productId._doc } };
@@ -92,7 +93,6 @@ async function addOrder() {
     items: cartItems,
     user: {
       userId: Types.ObjectId(_id),
-      username,
       email,
     },
   });
@@ -109,6 +109,12 @@ async function getOrders() {
 
   return orders;
 }
+
+userSchema.pre('save', async function() {
+  const saltRounds = +process.env.SALT_ROUNDS;
+  const hash = await bcrypt.hash(this.password, saltRounds);
+  this.password = hash;
+});
 
 userSchema.methods.addToCart = addToCart;
 userSchema.methods.getCart = getCart;
