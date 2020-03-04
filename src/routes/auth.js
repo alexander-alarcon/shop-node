@@ -1,5 +1,6 @@
 const express = require('express');
 
+const isAuth = require('../middleware/isAuth');
 const {
   getLogin,
   getSignUp,
@@ -20,12 +21,12 @@ router
   .post(postLogin);
 
 /**
- * POST /auth/login
+ * POST /auth/logout
  */
-router.post('/logout', postLogout);
+router.post('/logout', isAuth, postLogout);
 
 /**
- * GET /auth/login
+ * GET /auth/signup
  * POST /auth/signup
  */
 router
