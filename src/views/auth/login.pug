@@ -3,6 +3,9 @@ extends ../layouts/main-layout.pug
 block content
   if error.length
     +alert("Error: ", error, "danger")
+  
+  if success.length
+    +alert("Success: ", success)
   form.max-w-full.m-auto(
     action='/auth/login'
     method='POST'

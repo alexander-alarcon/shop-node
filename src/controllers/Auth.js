@@ -1,14 +1,17 @@
 const debug = require('debug')('shop-sequelize:AuthController');
 const bcrypt = require('bcrypt');
 
+const sgMail = require('../utils/emails');
 const User = require('../models/User');
 
 exports.getLogin = (req, res) => {
   const error = req.flash('error');
+  const success = req.flash('success');
   return res.render('auth/login', {
     path: '/auth/login',
     docTitle: 'Login',
     error,
+    success,
   });
 };
 
@@ -77,6 +80,15 @@ exports.postSignUp = async (req, res, next) => {
       password,
     });
     await newUser.save();
+    await sgMail.send({
+      from: 'shop@node.com',
+      to: email,
+      subject: 'Successful registration!',
+      html: `
+        <h1>Done!!</h1>
+      `,
+    });
+    req.flash('success', 'Done!');
     return res.redirect('/auth/login');
   } catch (error) {
     debug(error);
