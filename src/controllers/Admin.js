@@ -4,7 +4,10 @@ const Product = require('../models/Product');
 
 exports.getProducts = async (req, res, next) => {
   try {
-    const products = await Product.find({ isArchived: false });
+    const products = await Product.find({
+      userId: req.user._id,
+      isArchived: false,
+    });
 
     return res.render('admin/index', {
       docTitle: 'Admin Products',
@@ -75,13 +78,19 @@ exports.deleteProduct = async (req, res, next) => {
   const { productId } = req.body;
 
   try {
-    await Product.findByIdAndUpdate(productId, {
-      isArchived: true,
-    });
+    await Product.findOneAndUpdate(
+      {
+        _id: productId,
+        userId: req.user._id,
+      },
+      {
+        isArchived: true,
+      },
+    );
     return res.redirect('/admin/products');
   } catch (error) {
     debug(error);
-    return next(error);
+    return nproductIdext(error);
   }
 };
 
@@ -89,12 +98,18 @@ exports.postEditProduct = async (req, res, next) => {
   const { productId, title, price, imageUrl, description } = req.body;
 
   try {
-    await Product.findByIdAndUpdate(productId, {
-      title,
-      price,
-      imageUrl,
-      description,
-    });
+    await Product.findOneAndUpdate(
+      {
+        _id: productId,
+        userId: req.user._id,
+      },
+      {
+        title,
+        price,
+        imageUrl,
+        description,
+      },
+    );
     return res.redirect('/admin/products');
   } catch (error) {
     debug(error);
