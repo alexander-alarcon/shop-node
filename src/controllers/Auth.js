@@ -38,11 +38,12 @@ exports.postLogin = async (req, res, next) => {
         }
         return res.redirect('/shop');
       });
+    } else {
+      req.flash('error', 'Invalid email or password');
+      return await req.session.save((err) => {
+        return res.redirect('/auth/login');
+      });
     }
-    req.flash('error', 'Invalid email or password');
-    return await req.session.save((err) => {
-      return res.redirect('/auth/login');
-    });
   } catch (error) {
     debug(error);
     return next(error);
@@ -125,9 +126,10 @@ exports.postReset = (req, res) => {
           return res.redirect('/auth/reset');
         });
       }
-
+      const now = new Date();
+      now.setHours(now.getHours() + 1);
       user.resetToken = token;
-      user.resetTokenExpiration = Date.now() + 3600;
+      user.resetTokenExpiration = now;
       await user.save();
       await sgMail.send({
         from: 'shop@node.com',
@@ -140,8 +142,63 @@ exports.postReset = (req, res) => {
       });
       return res.redirect('/');
     } catch (error) {
-      console.log(error);
+      debug(error);
       return res.redirect('/auth/reset');
     }
   });
+};
+
+exports.getNewPassword = async (req, res, next) => {
+  try {
+    const { token } = req.params;
+    const user = await User.findOne({
+      resetToken: token,
+      resetTokenExpiration: {
+        $gt: Date.now(),
+      },
+    });
+    if (!user) {
+      console.log('not user found');
+      return res.redirect('/');
+    }
+    const error = req.flash('error');
+    const success = req.flash('success');
+    res.render('auth/new-password', {
+      path: '/auth/new-password',
+      docTitle: 'New password',
+      error,
+      success,
+      userId: user.id,
+      passwordToken: token,
+    });
+  } catch (error) {
+    debug(error);
+    next(error);
+  }
+};
+
+exports.postNewPassword = async (req, res, next) => {
+  try {
+    const { password, userId, passwordToken } = req.body;
+    const user = await User.findOne({
+      _id: userId,
+      resetToken: passwordToken,
+      resetTokenExpiration: {
+        $gt: new Date(),
+      },
+    });
+    if (!user) {
+      console.log('not user found');
+      return res.redirect('/');
+    }
+    user.password = password;
+    user.resetToken = null;
+    user.resetTokenExpiration = null;
+    await user.save();
+    req.flash('success', 'Password changed successfully!');
+    return res.redirect('/auth/login');
+  } catch (error) {
+    debug(error);
+    next(error);
+  }
 };

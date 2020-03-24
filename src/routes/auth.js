@@ -5,10 +5,12 @@ const {
   getLogin,
   getReset,
   getSignUp,
+  getNewPassword,
   postSignUp,
   postLogout,
   postLogin,
   postReset,
+  postNewPassword,
 } = require('../controllers/Auth');
 
 const router = express.Router();
@@ -44,5 +46,15 @@ router
   .route('/reset')
   .get(getReset)
   .post(postReset);
+
+/**
+ * GET /auth/reset/:token
+ */
+router.get('/reset/:token', getNewPassword);
+
+/**
+ * POST /auth/new-password
+ */
+router.post('/new-password', postNewPassword);
 
 module.exports = router;
