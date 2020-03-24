@@ -4,7 +4,7 @@
  * Module dependencies.
  */
 
-const debug = require('debug')('shop-sequelize:server');
+const debug = require('debug')('shop-mongoose:server');
 const http = require('http');
 require('dotenv').config();
 

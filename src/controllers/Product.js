@@ -1,4 +1,4 @@
-const debug = require('debug')('shop-sequelize:ProductController');
+const debug = require('debug')('shop-mongoose:ProductController');
 
 const Product = require('../models/Product');
 

@@ -7,10 +7,10 @@ block content
   if success.length
     +alert("Success: ", success)
   form.max-w-full.m-auto(
-    action='/auth/login'
+    action='/auth/reset'
     method='POST'
     class='w-11/12'
-  )    
+  )
     .my-4
       label.block.w-full(for='email')
         | Email
@@ -20,14 +20,4 @@ block content
         )
 
     .my-4
-      label.block.w-full(for='password')
-        | Password
-        input#password.w-full.block.px-4.py-2.border.border-solid.border-teal-800.rounded.outline-none(
-          type='password'
-          name='password'
-        )
-
-    .my-4.text-center
-      a(href="reset") Reset Password 
-    .my-4
-      +button('Login')
+      +button('Reset')

@@ -1,5 +1,6 @@
-const debug = require('debug')('shop-sequelize:AuthController');
+const debug = require('debug')('shop-mongoose:AuthController');
 const bcrypt = require('bcrypt');
+const crypto = require('crypto');
 
 const sgMail = require('../utils/emails');
 const User = require('../models/User');
@@ -94,4 +95,53 @@ exports.postSignUp = async (req, res, next) => {
     debug(error);
     next(error);
   }
+};
+
+exports.getReset = (req, res) => {
+  const error = req.flash('error');
+  const success = req.flash('success');
+  return res.render('auth/reset', {
+    path: '/auth/reset',
+    docTitle: 'Reset Password',
+    error,
+    success,
+  });
+};
+
+exports.postReset = (req, res) => {
+  const { email } = req.body;
+  crypto.randomBytes(32, async (err, buffer) => {
+    if (err) {
+      console.log(err);
+      return res.redirect('/auth/reset');
+    }
+
+    try {
+      const token = buffer.toString('hex');
+      const user = await User.findOne({ email });
+      if (!user) {
+        req.flash('error', 'Email not found!');
+        return req.session.save((err) => {
+          return res.redirect('/auth/reset');
+        });
+      }
+
+      user.resetToken = token;
+      user.resetTokenExpiration = Date.now() + 3600;
+      await user.save();
+      await sgMail.send({
+        from: 'shop@node.com',
+        to: email,
+        subject: 'Password reset',
+        html: `
+          <p>You requested a password reset</p>
+          <p>Click this <a href="http://localhost:3001/auth/reset/${token}">link</a> to set a new password.</p>
+        `,
+      });
+      return res.redirect('/');
+    } catch (error) {
+      console.log(error);
+      return res.redirect('/auth/reset');
+    }
+  });
 };

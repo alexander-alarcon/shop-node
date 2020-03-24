@@ -1,5 +1,5 @@
 require('dotenv').config();
-const debug = require('debug')('shop-sequelize:DB');
+const debug = require('debug')('shop-mongoose:DB');
 const mongoose = require('mongoose');
 const faker = require('faker');
 
