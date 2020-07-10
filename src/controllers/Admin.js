@@ -89,10 +89,11 @@ exports.deleteProduct = async (req, res, next) => {
         isArchived: true,
       },
     );
+    req.flash('success', 'Product deleted successfully');
     return res.redirect('/admin/products');
   } catch (error) {
     debug(error);
-    return nproductIdext(error);
+    return next(error);
   }
 };
 
@@ -112,6 +113,7 @@ exports.postEditProduct = async (req, res, next) => {
         description,
       },
     );
+    req.flash('success', 'Product updated successfully');
     return res.redirect('/admin/products');
   } catch (error) {
     debug(error);

@@ -62,7 +62,8 @@ exports.postAddCart = async (req, res, next) => {
   try {
     const { productId } = req.body;
     await req.user.addToCart(productId);
-    return res.redirect('/shop/cart');
+    req.flash('success', 'Product added');
+    return res.redirect('/shop');
   } catch (error) {
     debug(error);
     return next(error);
@@ -73,6 +74,7 @@ exports.postDeleteCart = async (req, res, next) => {
   try {
     const { productId } = req.body;
     await req.user.deleteFromCart(productId);
+    req.flash('success', 'Product deleted successfully');
     return res.redirect('/shop/cart');
   } catch (error) {
     debug(error);
@@ -83,11 +85,13 @@ exports.postDeleteCart = async (req, res, next) => {
 exports.getOrders = async (req, res, next) => {
   try {
     const orders = await req.user.getOrders();
+    const success = req.flash('success');
     return res.render('shop/order', {
       docTitle: 'Orders',
       path: '/shop/orders',
       orders,
       isAuthenticated: req.session.isAuthenticated === true,
+      success,
     });
   } catch (error) {
     debug(error);
@@ -98,6 +102,7 @@ exports.getOrders = async (req, res, next) => {
 exports.postOrders = async (req, res, next) => {
   try {
     await req.user.addOrder();
+    req.flash('success', 'Ordered successfully');
     return res.redirect('/shop/orders');
   } catch (error) {
     debug(error);
