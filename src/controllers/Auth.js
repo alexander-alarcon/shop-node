@@ -2,6 +2,7 @@ const debug = require('debug')('shop-mongoose:AuthController');
 const bcrypt = require('bcrypt');
 const crypto = require('crypto');
 
+const fullUrl = require('../utils/getUrl');
 const sgMail = require('../utils/emails');
 const User = require('../models/User');
 
@@ -114,6 +115,7 @@ exports.postReset = (req, res) => {
   const { email } = req.body;
   crypto.randomBytes(32, async (err, buffer) => {
     if (err) {
+      req.flash('error', 'Something went wrong, please try again!');
       console.log(err);
       return res.redirect('/auth/reset');
     }
@@ -132,15 +134,20 @@ exports.postReset = (req, res) => {
       user.resetToken = token;
       user.resetTokenExpiration = now;
       await user.save();
+      const url = fullUrl(req);
       sgMail.send({
         from: 'shop@node.com',
         to: email,
         subject: 'Password reset',
         html: `
           <p>You requested a password reset</p>
-          <p>Click this <a href="http://localhost:3001/auth/reset/${token}">link</a> to set a new password.</p>
+          <p>Click this <a href="${url}/${token}">link</a> to set a new password.</p>
         `,
       });
+      req.flash(
+        'success',
+        `An email was sent to ${email}, please follow the instructions given`,
+      );
       return res.redirect('/');
     } catch (error) {
       debug(error);
@@ -190,6 +197,7 @@ exports.postNewPassword = async (req, res, next) => {
     });
     if (!user) {
       console.log('not user found');
+      req.flash('error', 'Something went wrong, please try again!');
       return res.redirect('/');
     }
     user.password = password;
