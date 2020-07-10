@@ -1,11 +1,12 @@
 extends ../layouts/main-layout.pug
 
 block content
-  h3 #{ product.title }
-  hr
-  div
-    img(src=`${ product.imageUrl }`, alt=`${ product.title }`)
-  h4 #{ product.price }
-  p #{ product.description }
-  if (isAuthenticated)
-    +formButton('/shop/cart', 'Add to Cart', product)
+  .flex.w-full(class="")
+    figure(class="w-full sm:w-1/2")
+      img(class="w-full sm:w-4/5 sm:mx-auto" src=`${ product.imageUrl }`, alt=`${ product.title }`)
+    div.px-4
+      h3.text-xl #{ product.title }
+      h4 $ #{ product.price }
+      p.text-sm #{ product.description }
+      if (isAuthenticated)
+        +formButton('/shop/cart', 'Add to Cart', product)

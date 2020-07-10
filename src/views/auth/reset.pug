@@ -3,14 +3,16 @@ extends ../layouts/main-layout.pug
 block content
   if error.length
     +alert("Error: ", error, "danger")
-  
+
   if success.length
     +alert("Success: ", success)
-  form.max-w-full.m-auto(
+  form.max-w-full.m-auto.p-4.bg-white.rounded-lg.shadow-lg(
     action='/auth/reset'
     method='POST'
-    class='w-11/12'
+    class='sm:w-4/5 md:w-1/2'
   )
+    .my-4
+      h3 Reset Password
     .my-4
       label.block.w-full(for='email')
         | Email
@@ -19,5 +21,5 @@ block content
           name='email'
         )
 
-    .my-4
+    .my-4.text-right
       +button('Reset')

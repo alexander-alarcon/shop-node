@@ -2,18 +2,20 @@ extends ../layouts/main-layout.pug
 
 block content
   .flex.justify-center.flex-col
+    h3.text-center Orders
     if orders.length > 0
       each order in orders
-        h3 Order # #{ order._id }
-        table.table-fixed
-          thead
-            tr
-              th.px-4.py-2.border.border-teal-800 Product
-              th.px-4.py-2.border.border-teal-800 Quantity
-          tbody
-            each item in order.items
-              tr 
-                td.px-4.py-2.border.border-teal-800 #{ item.product.title }
-                td.px-4.py-2.border.border-teal-800.text-center #{ item.quantity }
+        .mt-4.mx-auto
+          h3 Order # #{ order._id }
+          table.table-fixed
+            thead
+              tr
+                th.px-4.py-2.border.border-teal-800 Product
+                th.px-4.py-2.border.border-teal-800 Quantity
+            tbody
+              each item in order.items
+                tr 
+                  td.px-4.py-2.border.border-teal-800 #{ item.product.title }
+                  td.px-4.py-2.border.border-teal-800.text-center #{ item.quantity }
     else
       p No Orders

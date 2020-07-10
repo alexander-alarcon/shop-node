@@ -3,9 +3,9 @@ extends ../layouts/main-layout.pug
 block content
   p List of products
   if products.length > 0
-    .p-5.Custom__Grid
-      each product in products
-        article.shadow-md.Product__Item
+    .p-5.grid.grid-cols-1.gap-4(class="sm:grid-cols-2 lg:grid-cols-3")
+      each product in products  
+        article.bg-white.rounded-lg.shadow-lg.Product__Item
           header.p-4
             h3.m-0.Product__Title #{ product.title }
           .w-full

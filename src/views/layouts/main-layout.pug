@@ -5,11 +5,11 @@ head
   meta(http-equiv='X-UA-Compatible' content='ie=edge')
   link(href='https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css' rel='stylesheet')
   link(href='https://fonts.googleapis.com/css?family=Montserrat&display=swap' rel='stylesheet')
-  link(rel="stylesheet", href="/stylesheets/style.css")
+  link(rel="stylesheet" href="/stylesheets/style.css")
   title #{ docTitle }
   block styles
-  
-body(style='font-family: "Montserrat", sans-serif;')  
+
+body.bg-gray-100(style='font-family: "Montserrat", sans-serif;')  
   include ../mixins/alert
   include ../mixins/form-button
 
@@ -50,11 +50,11 @@ body(style='font-family: "Montserrat", sans-serif;')
               class=('md:mt-0 hover:text-yellow-500 active:text-yellow-500')
             ) Admin Products
             form.flex.justify-center(action="/auth/logout" method="POST")
-              input(type='hidden', name='_csrf' value=`${ csrfToken }`)
-              button.block.mt-4.text-white.text-center.mr-4(
+              input(type='hidden' name='_csrf' value=`${ csrfToken }`)
+              button.block.mt-4.text-white.text-center.mr-4.outline-none(
                 type="submit"
                 class=(path==='/auth/login' ? 'text-yellow-500' : '')
-                class=('md:mt-0 hover:text-yellow-500 active:text-yellow-500')
+                class=('md:mt-0 hover:text-yellow-500 active:text-yellow-500 focus:outline-none')
               ) Logout
           else
             a.block.mt-4.text-white.text-center.mr-4(
@@ -68,7 +68,7 @@ body(style='font-family: "Montserrat", sans-serif;')
               class=('md:mt-0 hover:text-yellow-500 active:text-yellow-500')
             ) Sign Up
 
-  main.p-4    
+  main.p-4
     block content
 
   script(

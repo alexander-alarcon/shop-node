@@ -3,11 +3,13 @@ extends ../layouts/main-layout.pug
 block content
   if error.length
     +alert("Error: ", error, "danger")
-  form.max-w-full.m-auto(
+  form.max-w-full.m-auto.p-4.bg-white.rounded-lg.shadow-lg(
     action='/auth/signup'
     method='POST'
-    class='w-11/12'
-  )    
+    class='sm:w-4/5 md:w-1/2'
+  )
+    .my-4
+      h3 Sign up
     .my-4
       label.block.w-full(for='title')
         | First Name
@@ -26,7 +28,7 @@ block content
 
     .my-4
       label.block.w-full(for='title')
-        | email
+        | Email
         input#title.w-full.block.px-4.py-2.border.border-solid.border-teal-800.rounded.outline-none(
           type='email'
           name='email'
@@ -48,5 +50,5 @@ block content
           name='confrimPassword'
         )
 
-    .my-4
+    .my-4.text-right
       +button('Sign Up')

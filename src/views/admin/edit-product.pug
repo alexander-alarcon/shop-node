@@ -1,14 +1,16 @@
 extends ../layouts/main-layout.pug
 
 block content
-  form.max-w-full.m-auto(
+  form.max-w-full.m-auto.p-4.bg-white.rounded-lg.shadow-lg(
     action=`/admin/${editing ? 'edit' : 'add'}-product`
     method='POST'
-    class='w-11/12'
+    class='sm:w-4/5 md:w-1/2'
   )
     if editing
-      input(type='hidden', name='productId', value=`${ product.id }`)
-    
+      input(type='hidden' name='productId', value=`${ product.id }`)
+
+    .my-4
+      h3 #{ editing ? 'Edit Product' : 'Add Product'}
     .my-4
       label.block.w-full(for='title')
         | Title
@@ -36,15 +38,15 @@ block content
           step='0.01'
           value=`${editing ? product.price : ''}`
         )
-    
+
     .my-4
       label.block.w-full(for='description')
         | Description
         textarea#description.w-full.block.px-4.py-2.border.border-solid.border-teal-800.rounded.outline-none(
-          rows='5'
+          rows='4'
           name='description'
         )
           | #{editing ? product.description : ''}
 
-    .my-4
+    .my-4.text-right
       +button('Submit')
