@@ -69,6 +69,11 @@ body.bg-gray-100(style='font-family: "Montserrat", sans-serif;')
             ) Sign Up
 
   main.p-4
+    if error && error.length
+      +alert("Error: ", error, "danger")
+
+    if success && success.length
+      +alert("Success: ", success)
     block content
 
   script(

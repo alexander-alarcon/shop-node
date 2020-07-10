@@ -4,11 +4,11 @@
 
 mixin alert(title, msg, alertType='success')
   div#alert(
-    class=`w-11/12 m-auto border px-4 py-3 rounded relative ${TYPES[alertType]}`
+    class=`fixed mr-4 right-0 border px-4 py-3 rounded ${TYPES[alertType]}`
     role="alert"
   )
     strong.font-bold #{ title }
-    span.block(class="sm:inline") #{ msg }
+    span.block(class="sm:inline mr-10") #{ msg }
     span#alert-button.absolute.top-0.bottom-0.right-0.px-4.py-3
       svg.fill-current.h-6.w-6(role="button" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 20 20")
         title Close

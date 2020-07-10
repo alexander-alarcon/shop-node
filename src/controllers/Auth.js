@@ -36,6 +36,7 @@ exports.postLogin = async (req, res, next) => {
           req.flash('error', 'Something went wrong, please try again');
           return next(err);
         }
+        req.flash('success', 'Login successfully');
         return res.redirect('/shop');
       });
     } else {
@@ -82,7 +83,7 @@ exports.postSignUp = async (req, res, next) => {
       password,
     });
     await newUser.save();
-    await sgMail.send({
+    sgMail.send({
       from: 'shop@node.com',
       to: email,
       subject: 'Successful registration!',
@@ -90,7 +91,7 @@ exports.postSignUp = async (req, res, next) => {
         <h1>Done!!</h1>
       `,
     });
-    req.flash('success', 'Done!');
+    req.flash('success', 'Sign up successfully');
     return res.redirect('/auth/login');
   } catch (error) {
     debug(error);
@@ -131,7 +132,7 @@ exports.postReset = (req, res) => {
       user.resetToken = token;
       user.resetTokenExpiration = now;
       await user.save();
-      await sgMail.send({
+      sgMail.send({
         from: 'shop@node.com',
         to: email,
         subject: 'Password reset',

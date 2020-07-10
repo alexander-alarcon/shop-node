@@ -8,12 +8,14 @@ exports.getProducts = async (req, res, next) => {
       userId: req.user._id,
       isArchived: false,
     });
+    const success = req.flash('success');
 
     return res.render('admin/index', {
       docTitle: 'Admin Products',
       path: '/admin/products',
       products,
       isAuthenticated: req.session.isAuthenticated === true,
+      success,
     });
   } catch (error) {
     debug('%O', error);

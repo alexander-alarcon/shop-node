@@ -1,8 +1,6 @@
 extends ../layouts/main-layout.pug
 
 block content
-  if error.length
-    +alert("Error: ", error, "danger")
   form.max-w-full.m-auto.p-4.bg-white.rounded-lg.shadow-lg(
     action='/auth/signup'
     method='POST'

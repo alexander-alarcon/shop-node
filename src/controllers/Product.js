@@ -5,11 +5,13 @@ const Product = require('../models/Product');
 exports.getProducts = async (req, res, next) => {
   try {
     const products = await Product.find({ isArchived: false });
+    const success = req.flash('success');
     return res.render('shop/index', {
       docTitle: 'admin/products',
       path: '/',
       products,
       isAuthenticated: req.session.isAuthenticated === true,
+      success,
     });
   } catch (error) {
     debug('%O', error);
