@@ -77,8 +77,7 @@ exports.postSignUp = async (req, res, next) => {
       return res.status(422).render('auth/signup', {
         path: '/auth/signup',
         docTitle: 'Sign Up',
-        error: errors.array()[0].msg,
-        ...req.body,
+        errors: errors.mapped(),
       });
     }
 

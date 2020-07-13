@@ -9,47 +9,57 @@ block content
     .my-4
       h3 Sign up
     .my-4
-      label.block.w-full(for='title')
+      label.block.w-full(for='firstName')
         | First Name
-        input#title.w-full.block.px-4.py-2.border.border-solid.border-teal-800.rounded.outline-none(
-          type='text'
-          name='firstName'
-          value=`${firstName || ''}`
-        )
+      input#firstName.w-full.block.px-4.py-2.border.border-solid.border-teal-800.rounded.outline-none(
+        type='text'
+        name='firstName'
+        value=`${errors && errors.firstName && errors.firstName.value || ''}`
+      )
+      if (errors && errors.firstName)
+        span.text-red-700.text-xs #{ errors.firstName.msg }
 
     .my-4
-      label.block.w-full(for='title')
+      label.block.w-full(for='lastName')
         | Last Name
-        input#title.w-full.block.px-4.py-2.border.border-solid.border-teal-800.rounded.outline-none(
-          type='text'
-          name='lastName'
-          value=`${lastName || ''}`
-        )
+      input#lastName.w-full.block.px-4.py-2.border.border-solid.border-teal-800.rounded.outline-none(
+        type='text'
+        name='lastName'
+        value=`${errors && errors.lastName && errors.lastName.value || ''}`
+      )
+      if (errors && errors.lastName)
+        span.text-red-700.text-xs #{ errors.lastName.msg }
 
     .my-4
-      label.block.w-full(for='title')
+      label.block.w-full(for='email')
         | Email
-        input#title.w-full.block.px-4.py-2.border.border-solid.border-teal-800.rounded.outline-none(
-          type='email'
-          name='email'
-          value=`${email || ''}`
-        )
+      input#email.w-full.block.px-4.py-2.border.border-solid.border-teal-800.rounded.outline-none(
+        type='email'
+        name='email'
+        value=`${errors && errors.email && errors.email.value || ''}`
+      )
+      if (errors && errors.email)
+        span.text-red-700.text-xs #{ errors.email.msg }
 
     .my-4
       label.block.w-full(for='password')
         | Password
-        input#password.w-full.block.px-4.py-2.border.border-solid.border-teal-800.rounded.outline-none(
-          type='password'
-          name='password'
-        )
+      input#password.w-full.block.px-4.py-2.border.border-solid.border-teal-800.rounded.outline-none(
+        type='password'
+        name='password'
+      )
+      if (errors && errors.password)
+        span.text-red-700.text-xs #{ errors.password.msg }
 
     .my-4
       label.block.w-full(for='confirmPassword')
         | Confirm Password
-        input#confirmPassword.w-full.block.px-4.py-2.border.border-solid.border-teal-800.rounded.outline-none(
-          type='password'
-          name='confirmPassword'
-        )
+      input#confirmPassword.w-full.block.px-4.py-2.border.border-solid.border-teal-800.rounded.outline-none(
+        type='password'
+        name='confirmPassword'
+      )
+      if (errors && errors.confirmPassword)
+        span.text-red-700.text-xs #{ errors.confirmPassword.msg }
 
     .my-4.text-right
       +button('Sign Up')
