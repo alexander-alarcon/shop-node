@@ -72,13 +72,13 @@ exports.getSignUp = async (req, res) => {
 exports.postSignUp = async (req, res, next) => {
   try {
     const errors = validationResult(req);
-    debug(errors);
     if (!errors.isEmpty()) {
       debug('%O', errors);
       return res.status(422).render('auth/signup', {
         path: '/auth/signup',
         docTitle: 'Sign Up',
         error: errors.array()[0].msg,
+        ...req.body,
       });
     }
 

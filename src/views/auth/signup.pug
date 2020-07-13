@@ -14,6 +14,7 @@ block content
         input#title.w-full.block.px-4.py-2.border.border-solid.border-teal-800.rounded.outline-none(
           type='text'
           name='firstName'
+          value=`${firstName || ''}`
         )
 
     .my-4
@@ -22,6 +23,7 @@ block content
         input#title.w-full.block.px-4.py-2.border.border-solid.border-teal-800.rounded.outline-none(
           type='text'
           name='lastName'
+          value=`${lastName || ''}`
         )
 
     .my-4
@@ -30,6 +32,7 @@ block content
         input#title.w-full.block.px-4.py-2.border.border-solid.border-teal-800.rounded.outline-none(
           type='email'
           name='email'
+          value=`${email || ''}`
         )
 
     .my-4
