@@ -1,4 +1,5 @@
 const debug = require('debug')('shop-mongoose:AuthController');
+const { validationResult } = require('express-validator');
 const bcrypt = require('bcrypt');
 const crypto = require('crypto');
 
@@ -24,6 +25,7 @@ exports.postLogin = async (req, res, next) => {
     if (!user) {
       req.flash('error', 'Invalid email or password');
       return await req.session.save((err) => {
+        debug(err);
         return res.redirect('/auth/login');
       });
     }
@@ -32,7 +34,7 @@ exports.postLogin = async (req, res, next) => {
     if (isRightPassword) {
       req.session.isAuthenticated = true;
       req.session.user = user;
-      req.session.save((err) => {
+      return req.session.save((err) => {
         if (err) {
           req.flash('error', 'Something went wrong, please try again');
           return next(err);
@@ -40,12 +42,12 @@ exports.postLogin = async (req, res, next) => {
         req.flash('success', 'Login successfully');
         return res.redirect('/shop');
       });
-    } else {
-      req.flash('error', 'Invalid email or password');
-      return await req.session.save((err) => {
-        return res.redirect('/auth/login');
-      });
     }
+    req.flash('error', 'Invalid email or password');
+    return await req.session.save((err) => {
+      debug(err);
+      return res.redirect('/auth/login');
+    });
   } catch (error) {
     debug(error);
     return next(error);
@@ -58,7 +60,7 @@ exports.postLogout = (req, res) => {
   res.redirect('/shop/');
 };
 
-exports.getSignUp = async (req, res, next) => {
+exports.getSignUp = async (req, res) => {
   const error = req.flash('error');
   return res.render('auth/signup', {
     path: '/auth/signup',
@@ -69,14 +71,19 @@ exports.getSignUp = async (req, res, next) => {
 
 exports.postSignUp = async (req, res, next) => {
   try {
-    const { firstName, lastName, email, password, confirmPassword } = req.body;
-    const user = await User.findOne({ where: { email } });
-    if (user) {
-      req.flash('error', 'Email already taken');
-      return req.session.save((err) => {
-        return res.redirect('/auth/login');
+    const errors = validationResult(req);
+    debug(errors);
+    if (!errors.isEmpty()) {
+      debug('%O', errors);
+      return res.status(422).render('auth/signup', {
+        path: '/auth/signup',
+        docTitle: 'Sign Up',
+        error: errors.array()[0].msg,
       });
     }
+
+    const { firstName, lastName, email, password } = req.body;
+
     const newUser = await new User({
       firstName,
       lastName,
@@ -96,7 +103,7 @@ exports.postSignUp = async (req, res, next) => {
     return res.redirect('/auth/login');
   } catch (error) {
     debug(error);
-    next(error);
+    return next(error);
   }
 };
 
@@ -116,7 +123,7 @@ exports.postReset = (req, res) => {
   crypto.randomBytes(32, async (err, buffer) => {
     if (err) {
       req.flash('error', 'Something went wrong, please try again!');
-      console.log(err);
+      debug(err);
       return res.redirect('/auth/reset');
     }
 
@@ -125,7 +132,8 @@ exports.postReset = (req, res) => {
       const user = await User.findOne({ email });
       if (!user) {
         req.flash('error', 'Email not found!');
-        return req.session.save((err) => {
+        return req.session.save((error) => {
+          debug(error);
           return res.redirect('/auth/reset');
         });
       }
@@ -166,12 +174,12 @@ exports.getNewPassword = async (req, res, next) => {
       },
     });
     if (!user) {
-      console.log('not user found');
+      debug('not user found');
       return res.redirect('/');
     }
     const error = req.flash('error');
     const success = req.flash('success');
-    res.render('auth/new-password', {
+    return res.render('auth/new-password', {
       path: '/auth/new-password',
       docTitle: 'New password',
       error,
@@ -181,7 +189,7 @@ exports.getNewPassword = async (req, res, next) => {
     });
   } catch (error) {
     debug(error);
-    next(error);
+    return next(error);
   }
 };
 
@@ -196,7 +204,7 @@ exports.postNewPassword = async (req, res, next) => {
       },
     });
     if (!user) {
-      console.log('not user found');
+      debug('User not found');
       req.flash('error', 'Something went wrong, please try again!');
       return res.redirect('/');
     }
@@ -208,6 +216,6 @@ exports.postNewPassword = async (req, res, next) => {
     return res.redirect('/auth/login');
   } catch (error) {
     debug(error);
-    next(error);
+    return next(error);
   }
 };
