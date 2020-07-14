@@ -50,37 +50,44 @@ router
   .post(
     [
       body('firstName')
+        .trim()
         .not()
         .isEmpty()
         .withMessage('First name is required'),
       body('lastName')
+        .trim()
         .not()
         .isEmpty()
         .withMessage('Last name is required'),
       body('email', 'Please insert a valid email')
         .isEmail()
+        .normalizeEmail()
         .custom((value) => {
           return User.findOne({ email: value }).then((user) => {
             if (user) return Promise.reject(new Error('E-mail already in use'));
             return true;
           });
         }),
-      body('password').custom((value) => {
-        if (
-          !/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{8,}$/.test(
-            value,
-          )
-        ) {
-          throw new Error('Password is too weak!');
-        }
-        return true;
-      }),
-      body('confirmPassword').custom((value, { req }) => {
-        if (value !== req.body.password) {
-          throw new Error('Passwords have to match!');
-        }
-        return true;
-      }),
+      body('password')
+        .trim()
+        .custom((value) => {
+          if (
+            !/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{8,}$/.test(
+              value,
+            )
+          ) {
+            throw new Error('Password is too weak!');
+          }
+          return true;
+        }),
+      body('confirmPassword')
+        .trim()
+        .custom((value, { req }) => {
+          if (value !== req.body.password) {
+            throw new Error('Passwords have to match!');
+          }
+          return true;
+        }),
     ],
     postSignUp,
   );
