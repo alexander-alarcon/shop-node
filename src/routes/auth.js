@@ -25,7 +25,15 @@ const router = express.Router();
 router
   .route('/login')
   .get(getLogin)
-  .post(postLogin);
+  .post(
+    [
+      body('email', 'E-mail is required')
+        .isEmail()
+        .notEmpty(),
+      body('password', 'Password is required').notEmpty(),
+    ],
+    postLogin,
+  );
 
 /**
  * POST /auth/logout

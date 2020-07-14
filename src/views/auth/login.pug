@@ -11,18 +11,23 @@ block content
     .my-4
       label.block.w-full(for='email')
         | Email
-        input#email.w-full.block.px-4.py-2.border.border-solid.border-teal-800.rounded.outline-none(
-          type='email'
-          name='email'
-        )
+      input#email.w-full.block.px-4.py-2.border.border-solid.border-teal-800.rounded.outline-none(
+        type='email'
+        name='email'
+        value=`${errors && errors.email && errors.email.value || ''}`
+      )
+      if (errors && errors.email)
+        span.text-red-700.text-xs #{ errors.email.msg }
 
     .my-4
       label.block.w-full(for='password')
         | Password
-        input#password.w-full.block.px-4.py-2.border.border-solid.border-teal-800.rounded.outline-none(
-          type='password'
-          name='password'
-        )
+      input#password.w-full.block.px-4.py-2.border.border-solid.border-teal-800.rounded.outline-none(
+        type='password'
+        name='password'
+      )
+      if (errors && errors.password)
+        span.text-red-700.text-xs #{ errors.password.msg }
 
     .flex.my-4.justify-between.items-center
       a.text-teal-600(class="hover:text-teal-800" href="reset") Reset Password 
