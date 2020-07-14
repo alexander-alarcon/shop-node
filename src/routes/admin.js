@@ -1,3 +1,4 @@
+const { body } = require('express-validator');
 const express = require('express');
 
 const isAuth = require('../middleware/isAuth');
@@ -36,7 +37,30 @@ router
   .route('/add-product')
   .all(isAuth)
   .get(getAddProduct)
-  .post(postAddProduct);
+  .post(
+    [
+      body('title')
+        .trim()
+        .isString()
+        .isLength({
+          min: 3,
+        }),
+      body('imageUrl')
+        .trim()
+        .isURL(),
+      body('price')
+        .trim()
+        .isFloat(),
+      body('description')
+        .trim()
+        .isString()
+        .isLength({
+          min: 10,
+          max: 250,
+        }),
+    ],
+    postAddProduct,
+  );
 
 /*
   POST /admin/delete-product

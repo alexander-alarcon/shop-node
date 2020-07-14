@@ -1,11 +1,12 @@
 const debug = require('debug')('shop-mongoose:AdminController');
+const { validationResult } = require('express-validator');
 
 const Product = require('../models/Product');
 
 exports.getProducts = async (req, res, next) => {
   try {
     const products = await Product.find({
-      userId: req.user._id,
+      userId: req.user.id,
       isArchived: false,
     });
     const success = req.flash('success');
@@ -49,7 +50,7 @@ exports.getProduct = async (req, res, next) => {
   }
 };
 
-exports.getAddProduct = async (req, res, next) => {
+exports.getAddProduct = async (req, res) => {
   return res.render('admin/edit-product', {
     docTitle: 'Add Product',
     path: '/admin/add-product',
@@ -59,6 +60,20 @@ exports.getAddProduct = async (req, res, next) => {
 
 exports.postAddProduct = async (req, res, next) => {
   try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.render('admin/edit-product', {
+        docTitle: 'Add Product',
+        path: '/admin/add-product',
+        isAuthenticated: req.session.isAuthenticated === true,
+        hasErrors: true,
+        product: {
+          ...req.body,
+        },
+        errors: errors.mapped(),
+      });
+    }
+
     const { title, price, imageUrl, description } = req.body;
     const { id } = req.user;
     const product = new Product({
@@ -83,7 +98,7 @@ exports.deleteProduct = async (req, res, next) => {
     await Product.findOneAndUpdate(
       {
         _id: productId,
-        userId: req.user._id,
+        userId: req.user.id,
       },
       {
         isArchived: true,
@@ -104,7 +119,7 @@ exports.postEditProduct = async (req, res, next) => {
     await Product.findOneAndUpdate(
       {
         _id: productId,
-        userId: req.user._id,
+        userId: req.user.id,
       },
       {
         title,

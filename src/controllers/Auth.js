@@ -22,7 +22,6 @@ exports.postLogin = async (req, res, next) => {
   try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      debug('%O', errors);
       return res.status(422).render('auth/login', {
         path: '/auth/login',
         docTitle: 'Login',

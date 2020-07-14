@@ -14,39 +14,47 @@ block content
     .my-4
       label.block.w-full(for='title')
         | Title
-        input#title.w-full.block.px-4.py-2.border.border-solid.border-teal-800.rounded.outline-none(
-          type='text'
-          name='title'
-          value=`${editing ? product.title : ''}`
-        )
+      input#title.w-full.block.px-4.py-2.border.border-solid.border-teal-800.rounded.outline-none(
+        type='text'
+        name='title'
+        value=`${editing || hasErrors ? product.title : ''}`
+      )
+      if (errors && errors.title)
+        span.text-red-700.text-xs #{ errors.title.msg }
 
     .my-4
       label.block.w-full(for='imageUrl')
         | Image URL
-        input#imageUrl.w-full.block.px-4.py-2.border.border-solid.border-teal-800.rounded.outline-none(
-          type='text'
-          name='imageUrl'
-          value=`${editing ? product.imageUrl : ''}`
-        )
+      input#imageUrl.w-full.block.px-4.py-2.border.border-solid.border-teal-800.rounded.outline-none(
+        type='url'
+        name='imageUrl'
+        value=`${editing || hasErrors ? product.imageUrl : ''}`
+      )
+      if (errors && errors.imageUrl)
+        span.text-red-700.text-xs #{ errors.imageUrl.msg }
 
     .my-4
       label.block.w-full(for='price')
         | Price
-        input#price.w-full.block.px-4.py-2.border.border-solid.border-teal-800.rounded.outline-none(
-          type='number'
-          name='price'
-          step='0.01'
-          value=`${editing ? product.price : ''}`
-        )
+      input#price.w-full.block.px-4.py-2.border.border-solid.border-teal-800.rounded.outline-none(
+        type='number'
+        name='price'
+        step='0.01'
+        value=`${editing || hasErrors ? product.price : ''}`
+      )
+      if (errors && errors.price)
+        span.text-red-700.text-xs #{ errors.price.msg }
 
     .my-4
       label.block.w-full(for='description')
         | Description
-        textarea#description.w-full.block.px-4.py-2.border.border-solid.border-teal-800.rounded.outline-none(
-          rows='4'
-          name='description'
-        )
-          | #{editing ? product.description : ''}
+      textarea#description.w-full.block.px-4.py-2.border.border-solid.border-teal-800.rounded.outline-none(
+        rows='4'
+        name='description'
+      )
+        | #{editing || hasErrors ? product.description : ''}
+      if (errors && errors.description)
+        span.text-red-700.text-xs #{ errors.description.msg }
 
     .my-4.text-right
       +button('Submit')
