@@ -9,7 +9,7 @@ block content
           header.p-4
             h3.m-0.Product__Title #{ product.title }
           .w-full
-            img.w-full(src=`${ product.imageUrl }`, alt=`${ product.title }`)
+            img.w-full(src=`/${ product.imageUrl }`, alt=`${ product.title }`)
           .m-0.p-4
             p.m-0.Product__Price $#{ product.price }
             p.m-0.Product__Description #{ product.description }
