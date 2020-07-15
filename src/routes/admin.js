@@ -23,7 +23,30 @@ router.get('/products', isAuth, getProducts);
 /*
   POST /admin/products
 */
-router.post('/edit-product', isAuth, postEditProduct);
+router.post(
+  '/edit-product',
+  isAuth,
+  upload.single('image'),
+  [
+    body('title')
+      .trim()
+      .isString()
+      .isLength({
+        min: 3,
+      }),
+    body('price')
+      .trim()
+      .isFloat(),
+    body('description')
+      .trim()
+      .isString()
+      .isLength({
+        min: 10,
+        max: 250,
+      }),
+  ],
+  postEditProduct,
+);
 
 /*
   GET /admin/products/:productId

@@ -29,7 +29,6 @@ block content
       input#image.w-full.block.px-4.py-2.border.border-solid.border-teal-800.rounded.outline-none(
         type='file'
         name='image'
-        value=`${editing || hasErrors ? product.image : ''}`
       )
       if (errors && errors.image)
         span.text-red-700.text-xs #{ errors.image.msg }

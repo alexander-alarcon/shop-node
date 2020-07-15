@@ -125,20 +125,25 @@ exports.deleteProduct = async (req, res, next) => {
 };
 
 exports.postEditProduct = async (req, res, next) => {
-  const { productId, title, price, imageUrl, description } = req.body;
+  const { productId, title, price, description } = req.body;
+  const image = req.file;
 
   try {
+    const updatedProduct = {
+      title,
+      price,
+      description,
+    };
+
+    if (image) {
+      updatedProduct.imageUrl = image.path;
+    }
     await Product.findOneAndUpdate(
       {
         _id: productId,
         userId: req.user.id,
       },
-      {
-        title,
-        price,
-        imageUrl,
-        description,
-      },
+      updatedProduct,
     );
     req.flash('success', 'Product updated successfully');
     return res.redirect('/admin/products');
