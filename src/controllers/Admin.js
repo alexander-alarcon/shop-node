@@ -60,6 +60,8 @@ exports.getAddProduct = async (req, res) => {
 
 exports.postAddProduct = async (req, res, next) => {
   try {
+    const { title, price, description } = req.body;
+    const image = req.file;
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.render('admin/edit-product', {
@@ -73,13 +75,23 @@ exports.postAddProduct = async (req, res, next) => {
         errors: errors.mapped(),
       });
     }
-
-    const { title, price, imageUrl, description } = req.body;
+    if (!image) {
+      return res.render('admin/edit-product', {
+        docTitle: 'Add Product',
+        path: '/admin/add-product',
+        isAuthenticated: req.session.isAuthenticated === true,
+        hasErrors: true,
+        product: {
+          ...req.body,
+        },
+        errors: { image: { msg: 'File must be an image' } },
+      });
+    }
     const { id } = req.user;
     const product = new Product({
       title,
       price: +price,
-      imageUrl,
+      imageUrl: req.file.path,
       description,
       userId: id,
     });

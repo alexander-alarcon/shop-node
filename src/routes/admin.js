@@ -2,6 +2,7 @@ const { body } = require('express-validator');
 const express = require('express');
 
 const isAuth = require('../middleware/isAuth');
+const upload = require('../utils/uploadFile');
 
 const {
   getAddProduct,
@@ -38,6 +39,7 @@ router
   .all(isAuth)
   .get(getAddProduct)
   .post(
+    upload.single('image'),
     [
       body('title')
         .trim()
@@ -45,9 +47,6 @@ router
         .isLength({
           min: 3,
         }),
-      body('imageUrl')
-        .trim()
-        .isURL(),
       body('price')
         .trim()
         .isFloat(),

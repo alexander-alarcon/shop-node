@@ -2,9 +2,10 @@ extends ../layouts/main-layout.pug
 
 block content
   form.max-w-full.m-auto.p-4.bg-white.rounded-lg.shadow-lg(
-    action=`/admin/${editing ? 'edit' : 'add'}-product`
+    action=`/admin/${editing ? 'edit' : 'add'}-product?_csrf=${ csrfToken }`
     method='POST'
     class='sm:w-4/5 md:w-1/2'
+    enctype='multipart/form-data'
   )
     if editing
       input(type='hidden' name='productId', value=`${ product.id }`)
@@ -23,15 +24,15 @@ block content
         span.text-red-700.text-xs #{ errors.title.msg }
 
     .my-4
-      label.block.w-full(for='imageUrl')
-        | Image URL
-      input#imageUrl.w-full.block.px-4.py-2.border.border-solid.border-teal-800.rounded.outline-none(
-        type='url'
-        name='imageUrl'
-        value=`${editing || hasErrors ? product.imageUrl : ''}`
+      label.block.w-full(for='image')
+        | Image
+      input#image.w-full.block.px-4.py-2.border.border-solid.border-teal-800.rounded.outline-none(
+        type='file'
+        name='image'
+        value=`${editing || hasErrors ? product.image : ''}`
       )
-      if (errors && errors.imageUrl)
-        span.text-red-700.text-xs #{ errors.imageUrl.msg }
+      if (errors && errors.image)
+        span.text-red-700.text-xs #{ errors.image.msg }
 
     .my-4
       label.block.w-full(for='price')
