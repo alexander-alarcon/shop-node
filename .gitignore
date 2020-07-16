@@ -97,5 +97,6 @@ public/
 
 # upload files
 uploads/
+invoices
 
 # End of https://www.gitignore.io/api/node

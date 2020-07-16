@@ -1,3 +1,6 @@
+const { promises: fs } = require('fs');
+const path = require('path');
+
 const debug = require('debug')('shop-mongoose:ProductController');
 
 const Product = require('../models/Product');
@@ -106,6 +109,23 @@ exports.postOrders = async (req, res, next) => {
     return res.redirect('/shop/orders');
   } catch (error) {
     debug(error);
+    return next(error);
+  }
+};
+
+exports.getInvoice = async (req, res, next) => {
+  const { orderId } = req.params;
+  const invoiceName = `invoice-${orderId}.pdf`;
+  const invoicePath = path.resolve('invoices', invoiceName);
+  try {
+    const file = await fs.readFile(invoicePath);
+    if (!file) {
+      return next(new Error('File not found!'));
+    }
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', `inline; filename="${invoiceName}"`);
+    return res.send(file);
+  } catch (error) {
     return next(error);
   }
 };
