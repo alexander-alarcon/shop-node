@@ -1,4 +1,4 @@
-const { promises: fs } = require('fs');
+const fs = require('fs');
 const path = require('path');
 
 const debug = require('debug')('shop-mongoose:ProductController');
@@ -123,13 +123,14 @@ exports.getInvoice = async (req, res, next) => {
     if (order.user.userId.toString() !== req.user._id.toString()) {
       throw new Error('Unauthorized');
     }
-    const file = await fs.readFile(invoicePath);
+    /* const file = await fs.readFile(invoicePath);
     if (!file) {
       return next(new Error('File not found!'));
-    }
+    } */
+    const file = fs.createReadStream(invoicePath);
     res.setHeader('Content-Type', 'application/pdf');
     res.setHeader('Content-Disposition', `inline; filename="${invoiceName}"`);
-    return res.send(file);
+    file.pipe(res);
   } catch (error) {
     return next(error);
   }
