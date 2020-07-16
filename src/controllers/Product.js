@@ -4,6 +4,7 @@ const path = require('path');
 const debug = require('debug')('shop-mongoose:ProductController');
 
 const Product = require('../models/Product');
+const Order = require('../models/Order');
 
 exports.getProducts = async (req, res, next) => {
   try {
@@ -118,6 +119,10 @@ exports.getInvoice = async (req, res, next) => {
   const invoiceName = `invoice-${orderId}.pdf`;
   const invoicePath = path.resolve('invoices', invoiceName);
   try {
+    const order = await Order.findById(orderId);
+    if (order.user.userId.toString() !== req.user._id.toString()) {
+      throw new Error('Unauthorized');
+    }
     const file = await fs.readFile(invoicePath);
     if (!file) {
       return next(new Error('File not found!'));
