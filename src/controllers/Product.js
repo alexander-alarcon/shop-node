@@ -6,6 +6,8 @@ const debug = require('debug')('shop-mongoose:ProductController');
 const Product = require('../models/Product');
 const Order = require('../models/Order');
 
+const createInvoice = require('../utils/generateInvoice');
+
 exports.getProducts = async (req, res, next) => {
   try {
     const products = await Product.find({ isArchived: false });
@@ -119,18 +121,18 @@ exports.getInvoice = async (req, res, next) => {
   const invoiceName = `invoice-${orderId}.pdf`;
   const invoicePath = path.resolve('invoices', invoiceName);
   try {
-    const order = await Order.findById(orderId);
-    if (order.user.userId.toString() !== req.user._id.toString()) {
+    const order = await Order.findById(orderId).populate(
+      'user.userId',
+      'firstName lastName',
+    );
+
+    if (order.user.userId._id.toString() !== req.user._id.toString()) {
       throw new Error('Unauthorized');
     }
-    /* const file = await fs.readFile(invoicePath);
-    if (!file) {
-      return next(new Error('File not found!'));
-    } */
-    const file = fs.createReadStream(invoicePath);
+    const doc = createInvoice(order, invoicePath);
     res.setHeader('Content-Type', 'application/pdf');
     res.setHeader('Content-Disposition', `inline; filename="${invoiceName}"`);
-    file.pipe(res);
+    doc.pipe(res);
   } catch (error) {
     return next(error);
   }
