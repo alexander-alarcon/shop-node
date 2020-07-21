@@ -3,6 +3,10 @@ const { model, Schema, Types } = require('mongoose');
 const Product = require('./Product');
 
 const orderSchema = new Schema({
+  date: {
+    type: Date,
+    default: new Date(),
+  },
   items: [
     {
       product: Product.schema,
