@@ -20,6 +20,6 @@ block content
               class='hover:bg-teal-800 hover:text-white active:bg-teal-800 active:text-white'
               ) Edit
             +formButton('/admin/delete-product', 'Delete', product, 'danger')
-
+    +paginator(pagination)
   else
     h3 No Products!

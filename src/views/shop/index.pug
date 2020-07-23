@@ -3,6 +3,7 @@ extends ../layouts/main-layout.pug
 block content
   p List of products
   if products.length > 0
+    +paginator(pagination)
     .p-5.grid.grid-cols-1.gap-4(class="sm:grid-cols-2 lg:grid-cols-3")
       each product in products  
         article.bg-white.rounded-lg.shadow-lg.Product__Item
