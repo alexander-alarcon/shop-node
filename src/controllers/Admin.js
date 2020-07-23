@@ -3,12 +3,18 @@ const { validationResult } = require('express-validator');
 
 const Product = require('../models/Product');
 
+const ITEMS_PER_PAGE = 10;
+
 exports.getProducts = async (req, res, next) => {
   try {
+    const { page = 1 } = req.query;
+    const totalItems = await Product.countDocuments({ isArchived: false });
     const products = await Product.find({
       userId: req.user.id,
       isArchived: false,
-    });
+    })
+      .skip((+page - 1) * ITEMS_PER_PAGE)
+      .limit(ITEMS_PER_PAGE);
     const success = req.flash('success');
 
     return res.render('admin/index', {
@@ -17,6 +23,14 @@ exports.getProducts = async (req, res, next) => {
       products,
       isAuthenticated: req.session.isAuthenticated === true,
       success,
+      pagination: {
+        hasNextPage: ITEMS_PER_PAGE < totalItems,
+        hasPrevPage: +page > 1,
+        nextPage: +page + 1,
+        prevPage: +page - 1,
+        lastPage: Math.ceil(totalItems / ITEMS_PER_PAGE),
+        page,
+      },
     });
   } catch (error) {
     debug('%O', error);

@@ -1,4 +1,3 @@
-const fs = require('fs');
 const path = require('path');
 
 const debug = require('debug')('shop-mongoose:ProductController');
@@ -8,9 +7,15 @@ const Order = require('../models/Order');
 
 const createInvoice = require('../utils/generateInvoice');
 
+const ITEMS_PER_PAGE = 6;
+
 exports.getProducts = async (req, res, next) => {
   try {
-    const products = await Product.find({ isArchived: false });
+    const { page = 1 } = req.query;
+    const totalItems = await Product.countDocuments({ isArchived: false });
+    const products = await Product.find({ isArchived: false })
+      .skip((+page - 1) * ITEMS_PER_PAGE)
+      .limit(ITEMS_PER_PAGE);
     const success = req.flash('success');
     return res.render('shop/index', {
       docTitle: 'admin/products',
@@ -18,6 +23,14 @@ exports.getProducts = async (req, res, next) => {
       products,
       isAuthenticated: req.session.isAuthenticated === true,
       success,
+      pagination: {
+        hasNextPage: ITEMS_PER_PAGE < totalItems,
+        hasPrevPage: +page > 1,
+        nextPage: +page + 1,
+        prevPage: +page - 1,
+        lastPage: Math.ceil(totalItems / ITEMS_PER_PAGE),
+        page: +page,
+      },
     });
   } catch (error) {
     debug('%O', error);
