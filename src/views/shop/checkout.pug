@@ -1,0 +1,20 @@
+extends ../layouts/main-layout.pug
+
+block content
+  form#payment-form.max-w-full.m-auto.p-4.bg-white.rounded-lg.shadow-lg(
+    method='POST'
+    class='sm:w-4/5 md:w-1/2'
+  )
+    #card-element.my-4
+      // Stripe.js injects the Card Element
+    .my-4
+      +button('Pay')
+    p#card-error(role='alert')
+    p.result-message.hidden
+      | Payment succeeded, see the result in your
+      a(href='' target='_blank') Stripe dashboard. 
+      |  Refresh the page to pay again.
+
+  script(src='https://js.stripe.com/v3/')
+  script(src='/javascripts/client.js' defer='')
+

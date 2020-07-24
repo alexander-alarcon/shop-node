@@ -19,6 +19,9 @@ block content
         tfoot
           tr
             td.px-4.py-2.border.border-teal-800.text-center(colspan=3)
-              +formButton('/shop/create-order', 'Order Now!', {})
+              a(
+                href='/shop/checkout'
+                class=' px-4 py-2 cursor-pointer rounded border border-teal-800 bg-white text-teal-800 hover:text-white hover:bg-teal-800 active:bg-teal-800 active:text-white'
+              ) Order Now!
     else
       p No products in cart
