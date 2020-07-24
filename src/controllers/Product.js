@@ -1,9 +1,12 @@
 const path = require('path');
 
 const debug = require('debug')('shop-mongoose:ProductController');
+const stripe = require('stripe')(process.env.STRIPE_SECRET);
+const Decimal = require('decimal.js-light');
 
 const Product = require('../models/Product');
 const Order = require('../models/Order');
+const User = require('../models/User');
 
 const createInvoice = require('../utils/generateInvoice');
 
@@ -122,7 +125,7 @@ exports.postOrders = async (req, res, next) => {
   try {
     await req.user.addOrder();
     req.flash('success', 'Ordered successfully');
-    return res.redirect('/shop/orders');
+    return res.send('ok');
   } catch (error) {
     debug(error);
     return next(error);
@@ -145,8 +148,46 @@ exports.getInvoice = async (req, res, next) => {
     const doc = createInvoice(order, invoicePath);
     res.setHeader('Content-Type', 'application/pdf');
     res.setHeader('Content-Disposition', `inline; filename="${invoiceName}"`);
-    doc.pipe(res);
+    return doc.pipe(res);
   } catch (error) {
+    return next(error);
+  }
+};
+
+exports.getCheckout = async (req, res, next) => {
+  try {
+    return res.render('shop/checkout', {
+      docTitle: 'checkout',
+      path: '/checkout',
+      isAuthenticated: req.session.isAuthenticated === true,
+    });
+  } catch (error) {
+    debug('%O', error);
+    return next(error);
+  }
+};
+
+exports.postCreatePaymentIntent = async (req, res, next) => {
+  try {
+    const user = await User.findById(req.user._id).populate(
+      'cart.items.productId',
+      'price',
+    );
+    const amount = user.cart.items.reduce((prev, curr) => {
+      return new Decimal(prev)
+        .plus(curr.quantity * curr.productId.price)
+        .toNumber();
+    }, 0);
+    const paymentIntent = await stripe.paymentIntents.create({
+      amount: amount * 100,
+      currency: 'usd',
+      description: 'Buy online at SHOP NODE',
+    });
+    return res.send({
+      clientSecret: paymentIntent.client_secret,
+    });
+  } catch (error) {
+    debug('%O', error);
     return next(error);
   }
 };

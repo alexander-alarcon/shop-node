@@ -10,6 +10,8 @@ const {
   postDeleteCart,
   postOrders,
   getInvoice,
+  getCheckout,
+  postCreatePaymentIntent,
 } = require('../controllers/Product');
 
 const router = express.Router();
@@ -48,6 +50,16 @@ router.get('/orders/:orderId', isAuth, getInvoice);
   POST /shop/create-order
 */
 router.post('/create-order', isAuth, postOrders);
+
+/*
+  GET /shop/checkout
+*/
+router.get('/checkout', isAuth, getCheckout);
+
+/*
+  POST /shop/create-payment-intent
+*/
+router.post('/create-payment-intent', isAuth, postCreatePaymentIntent);
 
 /*
   GET /shop/:productId
